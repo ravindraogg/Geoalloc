@@ -1,4 +1,14 @@
+---
+title: GeoAllocEnv
+emoji: 🌍
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
+
 # GeoAllocEnv: Strategic Resource Allocation under Geopolitical Constraints
+
 
 GeoAllocEnv is a deterministic, real-world simulation environment built to the **OpenEnv** specification. It challenges an AI agent to allocate limited oil resources across multiple countries while balancing unmet demand, stability, and geopolitical tension.
 
