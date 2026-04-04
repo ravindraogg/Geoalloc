@@ -1,6 +1,6 @@
 ---
 title: GeoAllocEnv
-emoji: 🌍
+emoji: ⚖️
 colorFrom: blue
 colorTo: green
 sdk: docker
@@ -12,10 +12,10 @@ pinned: false
 
 GeoAllocEnv is a deterministic, real-world simulation environment built to the **OpenEnv** specification. It challenges an AI agent to allocate limited oil resources across multiple countries while balancing unmet demand, stability, and geopolitical tension.
 
-## 🌍 Strategic Objective
+## [Objective] Strategic Objective
 The agent acts as a resource administrator, distributing oil to satisfy country demands. However, every allocation potentially increases **geopolitical tension** depending on the target country's enemy network. If global tension reaches 100%, the simulation terminates immediately.
 
-## 🚀 Key Features
+## [Features] Key Features
 - **OpenEnv Specification Compliant**: Implements `step()`, `reset()`, and `state()` with strict Pydantic v2 validation.
 - **Geopolitical Tension Mechanics**: Tension increases by `0.15 * (allocation_ratio) * number_of_enemies`, requiring strategic planning.
 - **Deterministic Evaluation**: Guaranteed reproducibility for automated grading.
@@ -27,7 +27,7 @@ The agent acts as a resource administrator, distributing oil to satisfy country 
 
 ---
 
-## 🛠️ Project Structure
+## [Structure] Project Structure
 ```text
 geoalloc-env/
 ├── server/            # OpenEnv server implementation
@@ -46,7 +46,7 @@ geoalloc-env/
 
 ---
 
-## 📖 How to Run
+## [Instructions] How to Run
 
 ### 1. Local Testing (Inference Runner)
 This will run the built-in LLM agent against the three task levels.
@@ -72,7 +72,7 @@ openenv push --repo-id your-username/geoalloc-env
 
 ---
 
-## 🛡️ Strategic Allocation Rules for Agents
+## [Rules] Strategic Allocation Rules for Agents
 Agents should follow these rules for maximum score:
 1.  **Priority**: Allocate to countries with 0 enemies first (Safe Countries).
 2.  **Batching**: Split large allocations into smaller batches for countries with high enemy counts.
@@ -81,7 +81,7 @@ Agents should follow these rules for maximum score:
 
 ---
 
-## 🎓 Metadata
+## [Metadata] Metadata
 - **Spec Version**: 1
 - **Target Deadline**: 8 April 2026, 11:59 PM IST
 - **Framework**: OpenEnv-Core 0.2.x
