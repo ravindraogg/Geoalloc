@@ -1,0 +1,2 @@
+[console_scripts]
+server = geoalloc_env.server.app:main

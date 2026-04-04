@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openenv-geoalloc"
+version = "1.0.0"
+description = "GeoAllocEnv: Strategic Resource Allocation under Geopolitical Constraints"
+requires-python = ">=3.10"
+dependencies = [
+    "openenv-core[core]>=0.2.2",
+    "pydantic>=2.0,<3.0",
+    "openai>=2.7.2",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+]
+
+[project.scripts]
+server = "geoalloc_env.server.app:main"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["geoalloc_env", "geoalloc_env.server"]
+package-dir = { "geoalloc_env" = ".", "geoalloc_env.server" = "server" }
