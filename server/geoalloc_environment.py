@@ -11,9 +11,15 @@ from openenv.core.env_server.interfaces import Environment
 from openenv.core.env_server.types import State
 
 try:
-    from ..models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
-except ImportError:
     from models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
+except (ImportError, ModuleNotFoundError):
+    try:
+        from ..models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
+    except (ImportError, ModuleNotFoundError):
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
 
 
 # Transition constants

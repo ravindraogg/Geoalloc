@@ -30,11 +30,18 @@ except Exception as e:  # pragma: no cover
     ) from e
 
 try:
-    from ..models import Action, Observation
-    from .geoalloc_environment import GeoAllocEnvironment
-except ModuleNotFoundError:
     from models import Action, Observation
     from server.geoalloc_environment import GeoAllocEnvironment
+except (ImportError, ModuleNotFoundError):
+    try:
+        from ..models import Action, Observation
+        from .geoalloc_environment import GeoAllocEnvironment
+    except (ImportError, ModuleNotFoundError):
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from models import Action, Observation
+        from server.geoalloc_environment import GeoAllocEnvironment
 
 
 # Create the app with web interface and README integration
