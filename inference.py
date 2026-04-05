@@ -1,17 +1,11 @@
 """
 inference.py — GeoAllocEnv inference runner.
-
-Strict stdout format:
-  [START] task=<task_name> env=geoalloc model=<model_name>
-  [STEP]  step=<n> action=<action_str> reward=<0.00> done=<true|false> error=<msg|null>
-  [END]   success=<true|false> steps=<n> rewards=<r1,r2,...>
+Follows the OpenEnv strict boilerplate format.
 """
-from __future__ import annotations
-
-import json
 import os
-import sys
-
+import json
+import textwrap
+from typing import List, Optional
 from openai import OpenAI
 
 # ── project imports ────────────────────────────────────────────────────────────
@@ -23,49 +17,46 @@ from env.tasks.medium import make_medium_env
 from env.tasks.hard import make_hard_env
 
 # ── env vars ───────────────────────────────────────────────────────────────────
-API_BASE_URL: str = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
-MODEL_NAME: str = os.environ.get("MODEL_NAME", "gpt-4o-mini")
-HF_TOKEN: str = os.environ.get("HF_TOKEN", "")
+IMAGE_NAME = os.getenv("IMAGE_NAME") or os.getenv("LOCAL_IMAGE_NAME")
+API_KEY = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
+API_BASE_URL = os.getenv("API_BASE_URL") or "https://api.openai.com/v1"
+MODEL_NAME = os.getenv("MODEL_NAME") or "gpt-4o-mini"
 
-# ── OpenAI client ──────────────────────────────────────────────────────────────
-_api_key = HF_TOKEN if HF_TOKEN else os.environ.get("OPENAI_API_KEY", "no-key")
-client = OpenAI(base_url=API_BASE_URL, api_key=_api_key)
+# ── setup ──────────────────────────────────────────────────────────────────────
+client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY if API_KEY else "no-key")
 
-# ── tasks registry ─────────────────────────────────────────────────────────────
-TASKS: list[tuple[str, GeoAllocEnv]] = [
-    ("easy", make_easy_env()),
-    ("medium", make_medium_env()),
-    ("hard", make_hard_env()),
+TASKS = [
+    ("easy", make_easy_env),
+    ("medium", make_medium_env),
+    ("hard", make_hard_env),
 ]
 
-SYSTEM_PROMPT = """You are an AI agent controlling oil allocation in a geopolitical simulation.
+SYSTEM_PROMPT = textwrap.dedent("""
+    You are an AI agent controlling oil allocation in a geopolitical simulation.
+    Each turn you receive an observation JSON and must return a single JSON action.
+    Action formats (return ONLY valid JSON):
+      {"type": "allocate", "country_id": "<id>", "amount": <integer>}
+      {"type": "no_op"}
+    
+    STRATEGY:
+    1. Meet demand for countries with 0 enemies first.
+    2. Monitor global_tension; do not let it reach 1.0.
+    3. Use small amounts for countries with many enemies.
+""").strip()
 
-Each turn you receive an observation JSON and must return a single JSON action.
+def log_start(task: str, env: str, model: str) -> None:
+    print(f"[START] task={task} env={env} model={model}", flush=True)
 
-Action formats (return ONLY valid JSON, no markdown, no explanation):
-  {"type": "allocate", "country_id": "<id>", "amount": <integer>}
-  {"type": "no_op"}
+def log_step(step: int, action: str, reward: float, done: bool, error: Optional[str]) -> None:
+    error_val = error if error else "null"
+    done_val = str(done).lower()
+    print(f"[STEP] step={step} action={action} reward={reward:.2f} done={done_val} error={error_val}", flush=True)
 
-CRITICAL RULES:
-1. global_tension increases by 0.15 * (amount/demand) * number_of_enemies when you allocate to a country.
-   If global_tension reaches 1.0, the episode ENDS immediately.
-2. Countries with MORE enemies cause MORE tension. Allocate to them LAST and in SMALL amounts.
-3. Countries with ZERO enemies are SAFE — allocate to them first.
-4. Never allocate more than available_oil.
-5. Never allocate more than a country's unmet_demand (demand - received).
-6. Allocate enough to each country to meet demand — unmet demand lowers your score.
-
-STRATEGY (follow this order):
-1. First, allocate to countries with 0 enemies (safe, no tension increase).
-2. Then, allocate small amounts to countries with 1 enemy.
-3. Only allocate to countries with 2+ enemies if oil remains AND tension is low (< 0.5).
-4. If global_tension > 0.7, use no_op to avoid ending the episode.
-5. Split large allocations across multiple steps to control tension.
-"""
-
+def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
+    rewards_str = ",".join(f"{r:.2f}" for r in rewards)
+    print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
 
 def ask_model(observation_dict: dict) -> dict:
-    """Call the LLM and parse the action JSON it returns."""
     user_msg = json.dumps(observation_dict, indent=2)
     response = client.chat.completions.create(
         model=MODEL_NAME,
@@ -76,84 +67,66 @@ def ask_model(observation_dict: dict) -> dict:
         temperature=0.0,
         max_tokens=256,
     )
-    content = response.choices[0].message.content
-    if content is None:
-        raise ValueError("Model returned empty/null content")
+    content = response.choices[0].message.content or "{}"
     raw = content.strip()
-    # Strip markdown fences if present
     if raw.startswith("```"):
         raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
+        if raw.startswith("json"): raw = raw[4:]
     return json.loads(raw.strip())
 
-
-def run_task(task_name: str, env: GeoAllocEnv) -> None:
-    obs = env.reset()
-    print(f"[START] task={task_name} env=geoalloc model={MODEL_NAME}", flush=True)
-
-    rewards: list[float] = []
-    step = 0
-    done = False
-
-    while not done:
-        obs_dict = obs.model_dump()
-        error_msg = "null"
-        action_str = "no_op"
-
-        try:
-            raw_action = ask_model(obs_dict)
-            action = Action(**raw_action)
-            action_str = (
-                f"allocate({action.country_id},{action.amount})"
-                if action.type == "allocate"
-                else "no_op"
-            )
-        except Exception as exc:
-            action = Action(type="no_op")
+def run_task(task_name: str, env_factory) -> None:
+    env: GeoAllocEnv = env_factory()
+    log_start(task=task_name, env="geoalloc", model=MODEL_NAME)
+    
+    rewards: List[float] = []
+    steps_taken = 0
+    score = 0.0
+    success = False
+    
+    try:
+        obs = env.reset()
+        done = False
+        
+        while not done:
+            steps_taken += 1
+            obs_dict = obs.model_dump()
+            error_msg = None
             action_str = "no_op"
-            error_msg = str(exc).replace("\n", " ")[:120]
+            
+            try:
+                raw_action = ask_model(obs_dict)
+                action = Action(**raw_action)
+                action_str = f"allocate({action.country_id},{action.amount})" if action.type == "allocate" else "no_op"
+            except Exception as e:
+                action = Action(type="no_op")
+                error_msg = str(e).replace("\n", " ")[:100]
+            
+            result = env.step(action)
+            obs, reward, done = result.observation, result.reward, result.done
+            
+            if result.info.error and not error_msg:
+                error_msg = result.info.error
+            
+            rewards.append(reward)
+            log_step(step=steps_taken, action=action_str, reward=reward, done=done, error=error_msg)
+            
+            if steps_taken >= 20: # Safety cap
+                done = True
 
-        result = env.step(action)
-        obs = result.observation
-        reward = result.reward
-        done = result.done
+        # Final grading logic
+        state_raw = env.state()
+        countries_obj = env._state.countries
+        total_demand = sum(c.demand for c in countries_obj)
+        score = grade(countries_obj, state_raw["global_tension"], total_demand)
+        score = min(max(score, 0.0), 1.0)
+        success = score >= 0.5
 
-        if result.info.error and error_msg == "null":
-            error_msg = result.info.error
+    finally:
+        log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
 
-        rewards.append(reward)
-        step += 1
-
-        done_str = "true" if done else "false"
-        print(
-            f"[STEP] step={step} action={action_str} "
-            f"reward={reward:.2f} done={done_str} error={error_msg}",
-            flush=True,
-        )
-
-    # Final grading
-    state_raw = env.state()
-    countries_obj = env._state.countries
-    total_demand = sum(c.demand for c in countries_obj)
-    final_score = grade(
-        countries=countries_obj,
-        global_tension=state_raw["global_tension"],
-        total_demand=total_demand,
-    )
-    success = final_score >= 0.5
-    rewards_str = ",".join(f"{r:.2f}" for r in rewards)
-    print(
-        f"[END] success={'true' if success else 'false'} "
-        f"steps={step} rewards={rewards_str}",
-        flush=True,
-    )
-
-
-def main() -> None:
-    for task_name, env in TASKS:
-        run_task(task_name, env)
-
+def main():
+    for task_name, factory in TASKS:
+        run_task(task_name, factory)
 
 if __name__ == "__main__":
     main()

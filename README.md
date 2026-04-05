@@ -46,16 +46,24 @@ geoalloc-env/
 
 ---
 
-## 📖 How to Run
+## 🚀 How to Run (Local Inference)
 
-### 1. Local Testing (Inference Runner)
-This will run the built-in LLM agent against the three task levels.
-```powershell
-$env:API_BASE_URL = "https://your-api-base-url"
-$env:MODEL_NAME = "your-model-name"
-$env:OPENAI_API_KEY = "your-key"
-python inference.py
-```
+To test the environment locally with your LLM agent before submitting:
+
+1. **Set your Environment Variables**:
+   ```powershell
+   $env:HF_TOKEN = "your-huggingface-token"
+   $env:API_BASE_URL = "https://api.openai.com/v1"  # Or your inference endpoint
+   $env:MODEL_NAME = "gpt-4o-mini"                 # Or your model name
+   ```
+
+2. **Run the Inference script**:
+   ```powershell
+   python inference.py
+   ```
+
+3. **Verify the Output**:
+   Check that it produces `[START]`, `[STEP]`, and `[END]` lines in stdout. The `[END]` line should include a `score` field.
 
 ### 2. Start the OpenEnv Server (Step 4)
 This starts the FastAPI server as specified in the OpenEnv framework.
