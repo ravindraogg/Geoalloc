@@ -26,13 +26,10 @@ app = create_app(
     max_concurrent_envs=1,
 )
 
-def main(host: str = "0.0.0.0", port: int = 8000):
+def main():
     import uvicorn
-    uvicorn.run(app, host=host, port=port)
+    # Use the string import path to ensure uvicorn can find the app in mono-mode
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860)
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=8000)
-    args = parser.parse_args()
-    main(port=args.port)
+    main()

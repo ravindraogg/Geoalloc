@@ -21,9 +21,7 @@ dev = [
 ]
 
 [project.scripts]
-server = "geoalloc_env.server.app:main"
+server = "server.app:main"
 
 [tool.setuptools]
-include-package-data = true
-packages = ["geoalloc_env", "geoalloc_env.server"]
-package-dir = { "geoalloc_env" = ".", "geoalloc_env.server" = "server" }
+packages = ["server", "env"]
