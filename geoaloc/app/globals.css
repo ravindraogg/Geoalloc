@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #050505;
+  --color-foreground: #ffffff;
+  --color-tension-low: #00f2ff;
+  --color-tension-mid: #ffaa00;
+  --color-tension-high: #ff3333;
+}
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px rgba(255, 51, 51, 0.3);
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .scanlines {
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 242, 255, 0.015) 2px, rgba(0, 242, 255, 0.015) 4px);
+    mix-blend-mode: screen;
+  }
+
+  .grid-pattern {
+    background-image: 
+      linear-gradient(rgba(0, 242, 255, 0.04) 1px, transparent 1px), 
+      linear-gradient(90deg, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(37, 99, 235, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 10%, rgba(139, 92, 246, 0.07) 0%, transparent 45%),
+    #050505;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Custom scrollbar for Thinking Trace */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
