@@ -8,16 +8,12 @@ except Exception as e:
 
 import sys
 import os
+import json
 # Ensure root is in PATH for Docker and local execution
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-try:
-    from models import Action, Observation
-    from server.geoalloc_environment import GeoAllocEnvironment
-except (ImportError, ModuleNotFoundError):
-    from ..models import Action, Observation
-    from .geoalloc_environment import GeoAllocEnvironment
-
+from env.models import Action, Observation
+from server.geoalloc_environment import GeoAllocEnvironment
 from fastapi.middleware.cors import CORSMiddleware
 
 app = create_app(
@@ -27,6 +23,14 @@ app = create_app(
     env_name="geoalloc",
     max_concurrent_envs=1,
 )
+
+@app.get("/countries")
+async def get_countries():
+    file_path = os.path.join(os.path.dirname(__file__), "countries.json")
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
+            return json.load(f)
+    return {}
 
 app.add_middleware(
     CORSMiddleware,

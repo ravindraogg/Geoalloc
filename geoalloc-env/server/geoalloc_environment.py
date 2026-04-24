@@ -12,10 +12,7 @@ from openenv.core.env_server.types import State
 # Ensure root is in PATH for Docker and local execution
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-try:
-    from models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
-except (ImportError, ModuleNotFoundError):
-    from ..models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
+from env.models import GeoAllocAction, GeoAllocObservation, CountryState, EnvState, CountryObservation
 
 # Transition constants
 ALPHA = 0.3
@@ -28,7 +25,7 @@ STRATEGIC_DELAY_BONUS = 0.05
 LAMBDA_TENSION = 0.7
 DEMAND_MET_BONUS = 0.1
 
-def _compute_reward(countries, global_tension, action_type, tension_decreased, action_valid):
+def _compute_reward(countries, global_tension, action_type, tension_decreased, action_valid, is_done=False):
     avg_stability = sum(c.stability for c in countries) / len(countries) if countries else 0.0
     
     # Core Formula: Reward = Stability - lambda * Tension^2
@@ -40,14 +37,17 @@ def _compute_reward(countries, global_tension, action_type, tension_decreased, a
         reward += DEMAND_MET_BONUS
     
     # Strategic Delay Signal (Innovation)
-    # Only if tension is high (>0.6) and unmet demand exists
     if action_type == "no_op" and tension_decreased and total_unmet > 0 and global_tension > 0.6:
         reward += STRATEGIC_DELAY_BONUS
+        
+    # Survival Bonus (Round 2)
+    if is_done and global_tension < 1.0:
+        reward += 0.3
         
     if not action_valid:
         reward += INVALID_ACTION_PENALTY
         
-    return max(-1.0, min(1.0, reward)), avg_stability, total_unmet
+    return max(-1.0, min(2.0, reward)), avg_stability, total_unmet
 
 import json
 import random
@@ -106,27 +106,48 @@ class GeoAllocEnvironment(Environment):
     def step(self, action: GeoAllocAction) -> GeoAllocObservation:
         prev_tension = self._env_state.global_tension
         action_valid = True
+        reasoning = ""
         
         if action.type == "allocate":
             action_valid = self._validate_and_apply(action)
+            if action_valid:
+                reasoning = f"Strategic Deployment: Allocated {action.amount} units to {action.country_id} to reinforce regional stability."
+            else:
+                reasoning = f"Deployment Failure: Requested allocation for {action.country_id} exceeded available reserves or invalid sector."
         elif action.type == "no_op":
-            # Tension Decay Logic
+            # Tension Decay Logic (Round 2: only on no_op)
             self._env_state.global_tension = max(0.0, self._env_state.global_tension - TENSION_DECAY)
+            reasoning = "Tactical Restraint: Initiating strategic delay to facilitate geopolitical tension decay."
+        elif action.type == "probe":
+            if self._env_state.available_oil >= 1 and action.country_id not in self._env_state.probed_countries:
+                self._env_state.available_oil -= 1
+                self._env_state.probed_countries.append(action.country_id)
+                reasoning = f"Intelligence Gathering: Probed {action.country_id} to identify latent threat vectors."
+            else:
+                action_valid = False
+                reasoning = f"Intelligence Failure: Insufficient resources or redundant probe for {action.country_id}."
         
         tension_decreased = self._env_state.global_tension < prev_tension
         
         self._env_state.time_step += 1
         self._state.step_count = self._env_state.time_step
         
+        # Process Events Lifecycle
+        for event in self._env_state.active_events:
+            event.remaining_turns -= 1
+        self._env_state.active_events = [e for e in self._env_state.active_events if e.remaining_turns > 0]
+
+        done = self._is_done()
         reward, _, _ = _compute_reward(
             self._env_state.countries, 
             self._env_state.global_tension,
             action.type,
             tension_decreased,
             action_valid,
+            is_done=done
         )
         
-        return self._make_observation(done=self._is_done(), reward=reward)
+        return self._make_observation(done=done, reward=reward, reasoning=reasoning)
 
     @property
     def state(self) -> State: return self._state
@@ -134,12 +155,22 @@ class GeoAllocEnvironment(Environment):
     def _validate_and_apply(self, action: GeoAllocAction) -> bool:
         c = next((c for c in self._env_state.countries if c.id == action.country_id), None)
         if c is None or action.amount > self._env_state.available_oil: return False
+        
         self._env_state.available_oil -= action.amount
         c.received += action.amount
+        
         ratio = action.amount / c.demand if c.demand > 0 else 0.0
         c.stability = min(1.0, c.stability + ALPHA * ratio)
+        
+        # Calculate Tension Multiplier from Events
+        multiplier = 1.0
+        for event in self._env_state.active_events:
+            if c.id in event.affected_countries:
+                multiplier *= event.tension_multiplier
+
         if c.enemies:
-            self._env_state.global_tension = min(1.0, self._env_state.global_tension + BETA * ratio * len(c.enemies))
+            self._env_state.global_tension = min(1.0, self._env_state.global_tension + (BETA * multiplier) * ratio * len(c.enemies))
+        
         self._waste += max(0, c.received - c.demand) * OVERFLOW_PENALTY
         return True
 
@@ -150,11 +181,13 @@ class GeoAllocEnvironment(Environment):
 
     def _init_params(self, params: dict): pass
 
-    def _make_observation(self, done: bool, reward: float) -> GeoAllocObservation:
+    def _make_observation(self, done: bool, reward: float, reasoning: str = "") -> GeoAllocObservation:
         country_obs = [
             CountryObservation(
                 id=c.id, demand=c.demand, received=c.received, stability=c.stability,
-                allies=list(c.allies), enemies=list(c.enemies), unmet_demand=max(0, c.demand - c.received),
+                allies=list(c.allies), 
+                enemies=list(c.enemies) if c.id in self._env_state.probed_countries else [], 
+                unmet_demand=max(0, c.demand - c.received),
             )
             for c in self._env_state.countries
         ]
@@ -162,4 +195,6 @@ class GeoAllocEnvironment(Environment):
             available_oil=self._env_state.available_oil, countries=country_obs,
             global_tension=self._env_state.global_tension, time_step=self._env_state.time_step,
             max_steps=self._env_state.max_steps, done=done, reward=reward,
+            reasoning=reasoning,
+            active_events=list(self._env_state.active_events)
         )
