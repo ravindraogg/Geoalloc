@@ -9,7 +9,12 @@ def make_hard_env() -> GeoAllocEnv:
     - Dense enemy network (multiple bilateral tensions)
     - Severe oil scarcity (total demand = 300, available = 160)
     - High initial tension (0.3)
-    - High tension sensitivity (more enemies per country)
+    - Varied refinery capacity → forces strategic allocation decisions
+      ares:     0.3 (low  — needs immediate aid, refining is slow)
+      zeus:     0.7 (high — benefits massively from delayed refining)
+      hera:     0.2 (very low — almost no refinery, direct-only)
+      poseidon: 0.6 (good — moderate delayed benefit)
+      athena:   0.4 (low-mid — slight refinery advantage)
     """
     state = EnvState(
         available_oil=160,
@@ -24,6 +29,8 @@ def make_hard_env() -> GeoAllocEnv:
                 stability=0.4,
                 allies=["zeus"],
                 enemies=["hera", "poseidon"],
+                refinery_capacity=0.3,
+                refined_buffer=0.0,
             ),
             CountryState(
                 id="zeus",
@@ -32,6 +39,8 @@ def make_hard_env() -> GeoAllocEnv:
                 stability=0.3,
                 allies=["ares"],
                 enemies=["hera", "athena"],
+                refinery_capacity=0.7,
+                refined_buffer=0.0,
             ),
             CountryState(
                 id="hera",
@@ -40,6 +49,8 @@ def make_hard_env() -> GeoAllocEnv:
                 stability=0.35,
                 allies=["poseidon"],
                 enemies=["ares", "zeus"],
+                refinery_capacity=0.2,
+                refined_buffer=0.0,
             ),
             CountryState(
                 id="poseidon",
@@ -48,6 +59,8 @@ def make_hard_env() -> GeoAllocEnv:
                 stability=0.3,
                 allies=["hera"],
                 enemies=["ares", "athena"],
+                refinery_capacity=0.6,
+                refined_buffer=0.0,
             ),
             CountryState(
                 id="athena",
@@ -56,6 +69,8 @@ def make_hard_env() -> GeoAllocEnv:
                 stability=0.25,
                 allies=[],
                 enemies=["zeus", "poseidon"],
+                refinery_capacity=0.4,
+                refined_buffer=0.0,
             ),
         ],
     )

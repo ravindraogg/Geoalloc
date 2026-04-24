@@ -48,11 +48,13 @@ export default function Globe({ data }: { data: any[] }) {
 
   useEffect(() => {
     if (globeRef.current && data.length > 0) {
-      // If we are filtering for a specific country, focus on it
-      if (data.length === 1) {
-        globeRef.current.pointOfView({ lat: data[0].lat, lng: data[0].lng, altitude: 1.5 }, 1000);
+      const focusedPoint = data.find((p: any) => p.opacity === 1 && p.size === 1.0);
+      
+      if (focusedPoint) {
+        // Zoom into focused country
+        globeRef.current.pointOfView({ lat: focusedPoint.lat, lng: focusedPoint.lng, altitude: 1.5 }, 1000);
       } else {
-        // Otherwise, maintain a global overview
+        // Global overview
         globeRef.current.pointOfView({ altitude: 2.5 }, 1000);
       }
     }
@@ -63,7 +65,7 @@ export default function Globe({ data }: { data: any[] }) {
       <ScanlineOverlay />
       <GridOverlay />
       
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 flex items-center justify-center">
         <GlobeGl
           ref={globeRef}
           globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
@@ -74,7 +76,7 @@ export default function Globe({ data }: { data: any[] }) {
           pointsData={data}
           pointLat="lat"
           pointLng="lng"
-          pointColor="color"
+          pointColor={(d: any) => d.color}
           pointRadius="size"
           pointAltitude={0.02}
           pointsMerge={false}

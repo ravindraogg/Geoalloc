@@ -10,6 +10,8 @@ class CountryState(BaseModel):
     stability: float = Field(ge=0.0, le=1.0)
     allies: List[str] = Field(default_factory=list)
     enemies: List[str] = Field(default_factory=list)
+    refinery_capacity: float = 0.5  # 0.0 - 1.0
+    refined_buffer: float = 0.0     # Oil to be consumed next step
 
 
 class EnvState(BaseModel):
@@ -53,6 +55,8 @@ class CountryObservation(BaseModel):
     allies: List[str]
     enemies: List[str]
     unmet_demand: int
+    refinery_capacity: float
+    refined_buffer: float
 
 
 class Observation(BaseModel):
@@ -61,6 +65,10 @@ class Observation(BaseModel):
     global_tension: float
     time_step: int
     max_steps: int
+    done: bool = False
+    reward: float = 0.0
+    reasoning: Optional[str] = None
+    projection: Optional[dict] = None # For Strategic Foresight
 
 
 class StepInfo(BaseModel):

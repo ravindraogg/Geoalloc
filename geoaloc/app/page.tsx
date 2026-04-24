@@ -14,6 +14,13 @@ interface Country {
   allies: string[];
   enemies: string[];
   unmet_demand: number;
+  refinery_capacity: number;
+  refined_buffer: number;
+}
+
+interface Projection {
+  stability_delta: number;
+  tension_delta: number;
 }
 
 interface Observation {
@@ -24,9 +31,21 @@ interface Observation {
   max_steps: number;
   done: boolean;
   reward: number;
+  projection?: {
+    allocate: Projection;
+    no_op: Projection;
+  };
 }
 
-const countryCoords: Record<string, [number, number]> = countryDataRaw;
+const geoAllocCoords: Record<string, [number, number]> = {
+  "ares": [38.0, 23.0],
+  "zeus": [40.0, 22.0],
+  "hera": [36.0, 24.0],
+  "poseidon": [30.0, -30.0],
+  "athena": [38.0, 20.0]
+};
+
+const countryCoords = { ...countryDataRaw, ...geoAllocCoords } as unknown as Record<string, [number, number]>;
 
 // --- Components ---
 
@@ -107,36 +126,87 @@ const CountryCard = ({ country, onFocus }: { country: Country, onFocus: (id: str
   );
 };
 
-const FocusedView = ({ country, allCountries, onAllocate }: { country: Country, allCountries: Country[], onAllocate: (amount: number) => void }) => {
+const FocusedView = ({ country, allCountries, globalTension, projection, onAllocate, onWait }: { 
+  country: Country, 
+  allCountries: Country[], 
+  globalTension: number,
+  projection?: Observation['projection'],
+  onAllocate: (amount: number) => void,
+  onWait: () => void 
+}) => {
   const [amount, setAmount] = useState(25);
   
   const allies = allCountries.filter(c => country.allies.includes(c.id));
   const enemies = allCountries.filter(c => country.enemies.includes(c.id));
+  const isHighTension = globalTension > 0.6;
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Core Stats */}
-        <div className="md:col-span-2 glass p-8 rounded-3xl space-y-8 relative overflow-hidden border-cyan-500/20">
-          <div className="absolute top-0 right-0 p-8">
-            <div className="w-32 h-32 rounded-full border border-cyan-500/10 flex items-center justify-center animate-pulse">
-              <div className="w-24 h-24 rounded-full border border-cyan-500/20 flex items-center justify-center">
-                <div className="text-xs font-black text-cyan-500 uppercase tracking-widest">Active</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Decision Insight Panel */}
+        <div className={`p-6 rounded-3xl border flex flex-col justify-between glass ${isHighTension ? 'border-red-500/30 bg-red-500/5' : 'border-cyan-500/30 bg-cyan-500/5'}`}>
+          <div className="flex items-center gap-4 mb-4">
+            <div className={`w-2 h-2 rounded-full animate-pulse ${isHighTension ? 'bg-red-500' : 'bg-cyan-500'}`} />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white/60">Strategic Foresight</h3>
+          </div>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-bold text-white/80">{isHighTension ? "⚠️ High Tension: Restraint Advised" : "✅ Low Tension: Safe to Act"}</span>
+              <span className="text-[10px] font-mono text-white/20 uppercase">Confidence: 0.94</span>
+            </div>
+            {projection && (
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
+                <div className="space-y-1">
+                  <span className="text-[8px] uppercase text-white/30 font-bold">If Allocate</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-green-400 font-mono">+{projection.allocate.stability_delta.toFixed(3)}s</span>
+                    <span className="text-[10px] text-red-400 font-mono">+{projection.allocate.tension_delta.toFixed(3)}t</span>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[8px] uppercase text-white/30 font-bold">If Wait</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-white/60 font-mono">+{projection.no_op.stability_delta.toFixed(3)}s</span>
+                    <span className="text-[10px] text-cyan-400 font-mono">{projection.no_op.tension_delta.toFixed(3)}t</span>
+                  </div>
+                </div>
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Refinery Insight Panel */}
+        <div className="glass p-6 rounded-3xl border-white/5 flex flex-col justify-between">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-2 h-2 rounded-full bg-amber-500/50" />
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-white/60">Refinery Systems</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <span className="text-[8px] text-white/30 uppercase font-bold block">Capacity</span>
+              <span className="text-xl font-mono font-bold text-amber-400">{Math.round(country.refinery_capacity * 100)}%</span>
+            </div>
+            <div className="space-y-1">
+              <span className="text-[8px] text-white/30 uppercase font-bold block">In Pipeline</span>
+              <span className="text-xl font-mono font-bold text-cyan-400">{Math.round(country.refined_buffer)}u</span>
             </div>
           </div>
-          
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Core Stats */}
+        <div className="md:col-span-2 glass p-8 rounded-3xl space-y-8 relative overflow-hidden border-white/5">
           <div className="relative z-10">
             <h2 className="text-4xl font-black uppercase tracking-tighter mb-2">{country.id}</h2>
             <div className="flex gap-4 items-center">
               <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${country.stability > 0.7 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
                 Status: {country.stability > 0.7 ? 'Stable' : 'Unstable'}
               </span>
-              <span className="text-[10px] text-white/40 uppercase tracking-[0.2em]">Node ID: {country.id.toUpperCase()}-ST-2026</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
+          <div className="grid grid-cols-3 gap-8 relative z-10">
             <div className="space-y-1">
               <span className="text-[10px] text-white/30 uppercase block font-bold">Unmet Demand</span>
               <span className="text-2xl font-mono font-bold text-red-400">{Math.round(country.unmet_demand)}u</span>
@@ -149,17 +219,13 @@ const FocusedView = ({ country, allCountries, onAllocate }: { country: Country, 
               <span className="text-[10px] text-white/30 uppercase block font-bold">Stability</span>
               <span className="text-2xl font-mono font-bold">{Math.round(country.stability * 100)}%</span>
             </div>
-            <div className="space-y-1">
-              <span className="text-[10px] text-white/30 uppercase block font-bold">Allies</span>
-              <span className="text-2xl font-mono font-bold">{country.allies.length}</span>
-            </div>
           </div>
         </div>
 
         {/* Action Panel */}
         <div className="glass p-8 rounded-3xl border-white/10 flex flex-col justify-between bg-gradient-to-br from-white/5 to-transparent">
           <div className="space-y-6">
-            <h3 className="text-xs font-black text-cyan-400 uppercase tracking-widest">Neural Override</h3>
+            <h3 className="text-xs font-black text-cyan-400 uppercase tracking-widest">Decision Matrix</h3>
             <div className="space-y-4">
               <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-white/40">
                 <span>Alloc Amount</span>
@@ -172,42 +238,19 @@ const FocusedView = ({ country, allCountries, onAllocate }: { country: Country, 
               />
             </div>
           </div>
-          <button 
-            onClick={() => onAllocate(amount)}
-            className="w-full py-4 rounded-2xl bg-cyan-500 text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)]"
-          >
-            Deploy Resource
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Geopolitical Context */}
-        <div className="glass p-6 rounded-3xl space-y-4">
-          <h3 className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-2">
-            <div className="w-1 h-1 bg-cyan-500 rounded-full" /> Diplomatic Vectors
-          </h3>
-          <div className="space-y-3">
-            {allies.length > 0 ? allies.map(a => (
-              <div key={a.id} className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-white/80">{a.id}</span>
-                <span className="text-[10px] text-cyan-400 font-black">ALLY</span>
-              </div>
-            )) : <div className="text-[10px] text-white/20 uppercase">No active alliances found</div>}
-          </div>
-        </div>
-
-        <div className="glass p-6 rounded-3xl space-y-4">
-          <h3 className="text-[10px] font-black text-red-500/60 uppercase tracking-widest flex items-center gap-2">
-            <div className="w-1 h-1 bg-red-500 rounded-full" /> Threat Vectors
-          </h3>
-          <div className="space-y-3">
-            {enemies.length > 0 ? enemies.map(e => (
-              <div key={e.id} className="flex justify-between items-center p-3 rounded-xl bg-red-500/5 border border-red-500/10">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-red-400/80">{e.id}</span>
-                <span className="text-[10px] text-red-500 font-black italic animate-pulse">CONFLICT</span>
-              </div>
-            )) : <div className="text-[10px] text-white/20 uppercase">No active threats detected</div>}
+          <div className="flex flex-col gap-2">
+            <button 
+              onClick={() => onAllocate(amount)}
+              className="w-full py-4 rounded-2xl bg-cyan-500 text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)]"
+            >
+              Confirm Allocation
+            </button>
+            <button 
+              onClick={() => onWait()}
+              className="w-full py-3 rounded-xl bg-white/5 text-white/60 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all"
+            >
+              Strategic Hold (No-Op)
+            </button>
           </div>
         </div>
       </div>
@@ -281,16 +324,42 @@ export default function Home() {
 
   const globePoints = useMemo(() => {
     if (!obs) return [];
+    const focusedId = filter.toLowerCase();
+    const focusedCountry = obs.countries.find(c => c.id.toLowerCase() === focusedId);
+    
     return obs.countries.map(c => {
       const coords = countryCoords[c.id];
       if (!coords) return null;
-      const isFocused = filter !== "all" && c.id.toLowerCase() === filter.toLowerCase();
+      
+      const isFocused = filter !== "all" && c.id.toLowerCase() === focusedId;
+      const isEnemy = focusedCountry?.enemies.includes(c.id);
+      
+      // Determine behavior based on mode
+      let size = 0.1 + (1 - c.stability) * 0.4;
+      let color = c.stability < 0.4 ? "#ef4444" : c.stability < 0.7 ? "#fbbf24" : "#22d3ee";
+      let opacity = 1;
+
+      if (filter !== "all") {
+        if (isFocused) {
+          size = 1.0;
+          color = "#00f2ff"; // Bright Cyan
+        } else if (isEnemy) {
+          size = 0.6;
+          color = "#ff0000"; // Sharp Red
+        } else {
+          size = 0.05;
+          opacity = 0.2; // Dimmed
+          color = "#ffffff";
+        }
+      }
+
       return {
         ...c,
         lat: coords[0],
         lng: coords[1],
-        size: isFocused ? 0.8 : 0.1 + (1 - c.stability) * 0.4,
-        color: isFocused ? "#00f2ff" : c.stability < 0.4 ? "#ef4444" : c.stability < 0.7 ? "#fbbf24" : "#22d3ee"
+        size,
+        color,
+        opacity
       };
     }).filter(p => p !== null);
   }, [obs, filter]);
@@ -381,7 +450,10 @@ export default function Home() {
                 <FocusedView 
                   country={focusedCountry} 
                   allCountries={obs.countries}
+                  globalTension={obs.global_tension}
+                  projection={obs.projection}
                   onAllocate={(amt) => fetchData({ type: 'allocate', country_id: focusedCountry.id, amount: amt })} 
+                  onWait={() => fetchData({ type: 'no_op' })}
                 />
               ) : (
                 <div className="space-y-10">
@@ -395,6 +467,14 @@ export default function Home() {
                         {obs.global_tension.toFixed(3)}
                       </span>
                     </div>
+                    {obs.global_tension > 0.6 && (
+                      <div className="flex items-center gap-3 bg-cyan-500/10 border border-cyan-500/20 p-3 rounded-xl animate-in fade-in zoom-in duration-500">
+                        <div className="w-2 h-2 rounded-full bg-cyan-500 animate-ping" />
+                        <span className="text-[10px] font-black text-cyan-400 uppercase tracking-widest">
+                          Protocol: Strategic Restraint Active
+                        </span>
+                      </div>
+                    )}
                     <TensionGauge value={obs.global_tension} />
                   </section>
 

@@ -9,6 +9,7 @@ def make_easy_env() -> GeoAllocEnv:
     - No enemy relations
     - Sufficient oil (total demand = 100, available = 120)
     - Low initial tension
+    - High refinery capacity → almost all oil refined efficiently
     """
     state = EnvState(
         available_oil=120,
@@ -23,6 +24,8 @@ def make_easy_env() -> GeoAllocEnv:
                 stability=0.6,
                 allies=["beta"],
                 enemies=[],
+                refinery_capacity=0.8,
+                refined_buffer=0.0,
             ),
             CountryState(
                 id="beta",
@@ -31,6 +34,8 @@ def make_easy_env() -> GeoAllocEnv:
                 stability=0.6,
                 allies=["alpha"],
                 enemies=[],
+                refinery_capacity=0.7,
+                refined_buffer=0.0,
             ),
         ],
     )

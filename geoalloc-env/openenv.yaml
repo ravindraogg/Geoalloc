@@ -4,3 +4,61 @@ type: space
 runtime: fastapi
 app: server.app:app
 port: 7860
+
+description: >
+  GeoAllocEnv is a long-horizon geopolitical resource allocation environment
+  where agents must trade off immediate gain vs delayed stability under
+  adversarial constraints. Features refinery-based resource transformation
+  with delayed rewards and strategic tension management.
+
+action_schema:
+  type: object
+  properties:
+    type:
+      type: string
+      enum: [allocate, no_op]
+    country_id:
+      type: string
+      description: Target country for allocation (required for allocate)
+    amount:
+      type: integer
+      minimum: 0
+      description: Units of oil to allocate (required for allocate)
+  required: [type]
+
+observation_schema:
+  type: object
+  properties:
+    available_oil:
+      type: integer
+    countries:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: string }
+          demand: { type: integer }
+          received: { type: integer }
+          stability: { type: number, minimum: 0, maximum: 1 }
+          allies: { type: array, items: { type: string } }
+          enemies: { type: array, items: { type: string } }
+          unmet_demand: { type: integer }
+          refinery_capacity: { type: number, minimum: 0, maximum: 1 }
+          refined_buffer: { type: number }
+    global_tension:
+      type: number
+      minimum: 0
+      maximum: 1
+    time_step: { type: integer }
+    max_steps: { type: integer }
+
+tasks:
+  - id: easy
+    description: "2 countries, no enemies, surplus oil, high refinery capacity"
+    difficulty: easy
+  - id: medium
+    description: "3 countries, 1 enemy pair, limited oil, mixed refinery capacity"
+    difficulty: medium
+  - id: hard
+    description: "5 countries, dense enemy network, severe scarcity, varied refinery capacity"
+    difficulty: hard
