@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import List, Optional
-from env.models import CountryState
+from shared.models import CountryState
 
 # Reward constants
-LAMBDA_TENSION = 0.7
-DEMAND_MET_BONUS = 0.1
+LAMBDA_TENSION = 0.5
+DEMAND_MET_MULTIPLIER = 0.2
 STRATEGIC_DELAY_BONUS = 0.05
 SURVIVAL_BONUS = 0.3
 INVALID_ACTION_PENALTY = -0.1
@@ -22,11 +22,13 @@ def compute_reward(
     total_demand: int = 0,
 ) -> tuple[float, float, float, float]:
     """
-    Round 2 Consolidated Reward Function.
+    Round 2 Consolidated Reward Function (Tuned for Action).
 
-    R = avg_stability - λ × tension²
-      + demand_met_bonus   (if all demand satisfied)
+    R = avg_stability - 0.5 × tension²
+      + 0.2 * demand_met_ratio
       + strategic_delay    (if no_op AND tension > 0.6 AND tension decreased)
+      - no_op_penalty      (if no_op AND unmet demand exists)
+      + safe_action_bonus  (if allocate AND tension < 0.5)
       + survival_bonus     (if episode completed without tension blowout)
       - invalid_penalty    (if action was invalid)
 
@@ -43,8 +45,8 @@ def compute_reward(
     total_dem = sum(c.demand for c in countries) or 1
     unmet_ratio = min(total_unmet / total_dem, 1.0)
 
-    if total_unmet == 0:
-        reward += DEMAND_MET_BONUS
+    demand_met_ratio = 1.0 - unmet_ratio
+    reward += (DEMAND_MET_MULTIPLIER * demand_met_ratio)
 
     # Strategic Delay Signal (the innovation)
     if (action_type == "no_op"
@@ -52,6 +54,14 @@ def compute_reward(
             and total_unmet > 0
             and global_tension > 0.6):
         reward += STRATEGIC_DELAY_BONUS
+
+    # Reduce no_op bias
+    if action_type == "no_op" and total_unmet > 0:
+        reward -= 0.05
+
+    # Encourage action when safe
+    if action_type == "allocate" and global_tension < 0.5:
+        reward += 0.05
 
     # Survival bonus
     if is_done and global_tension < 1.0:

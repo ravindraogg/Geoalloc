@@ -59,42 +59,34 @@ def train_gpu():
         use_gradient_checkpointing="unsloth", random_state=42,
     )
 
-    SYSTEM_PROMPT = """
-You are a Geopolitical Resource Allocator.
-Objective: Sustain global stability while managing limited oil.
-Respond with your reasoning inside <thought> tags, then provide the JSON Action.
-
-STRATEGIC DIRECTIVE:
-1. When global_tension is high (>0.6), use "no_op" to trigger geopolitical cooling.
-2. Meet demand only when tension is manageable.
-3. Countries with HIGH refinery_capacity benefit MORE from delayed allocation.
-
-Action Format:
-<thought>
-Reasoning about current state, tension, and refinery tradeoffs...
-</thought>
-{"type": "allocate", "country_id": "ID", "amount": X}
-OR
-{"type": "no_op"}
-"""
-
-    def reward_env_step(completions, **kwargs):
+    def reward_fn(completions, prompts, **kwargs):
         rewards = []
-        for completion in completions:
-            try:
-                json_str = completion.split("</thought>")[-1].strip()
-                action_dict = json.loads(json_str)
-                action = Action(**action_dict)
-                env = make_hard_env()
-                result = env.step(action)
-                rewards.append(result.reward)
-            except Exception:
-                rewards.append(-0.5)
-        return rewards
 
-    def reward_reasoning_format(completions, **kwargs):
-        return [0.2 if ("<thought>" in c and "</thought>" in c) else 0.0
-                for c in completions]
+        for c, p in zip(completions, prompts):
+            r = 0.0
+
+            try:
+                json_part = c.split("}")[-2] + "}"
+                action = json.loads(json_part)
+
+                # --- match with dataset ---
+                target = p.get("action", None) if isinstance(p, dict) else kwargs.get("action", [None]*len(completions))[0]
+
+                if target:
+                    if action["type"] == target["type"]:
+                        r += 0.2
+                    if action.get("country_id") == target.get("country_id"):
+                        r += 0.2
+
+                r += 0.2  # valid JSON bonus
+
+            except:
+                rewards.append(-0.1)
+                continue
+
+            rewards.append(r)
+
+        return rewards
 
     # Load training observations
     obs_path = os.path.join(os.path.dirname(__file__), "training_observations.json")
@@ -105,8 +97,20 @@ OR
         raw_states = [make_hard_env().reset().model_dump()]
 
     print(f"[GPU] Loaded {len(raw_states)} states for training.")
-    prompts = [{"prompt": f"{SYSTEM_PROMPT}\nObservation: {json.dumps(s)}\nAction:"}
-               for s in raw_states]
+    
+    prompts = []
+    for x in raw_states:
+        target_action = x.get("action", None)
+        obs = {k: v for k, v in x.items() if k != "action"}
+        prompt_text = f"""
+Observation:
+{json.dumps(obs)}
+
+Give action in JSON:
+{{"type": "...", "country_id": "...", "amount": ...}}
+"""
+        prompts.append({"prompt": prompt_text, "action": target_action})
+        
     dataset = Dataset.from_list(prompts)
 
     training_args = GRPOConfig(
@@ -124,7 +128,7 @@ OR
 
     trainer = GRPOTrainer(
         model=model,
-        reward_funcs=[reward_env_step, reward_reasoning_format],
+        reward_funcs=[reward_fn],
         args=training_args,
         train_dataset=dataset,
     )
@@ -305,7 +309,7 @@ def train_cpu(n_episodes=120, eval_interval=10):
     log_path = os.path.join(OUTPUT_DIR, "training_log.json")
     with open(log_path, "w") as f:
         json.dump(history, f, indent=2)
-    print(f"\n[SAVED] Training log → {log_path}")
+    print(f"\n[SAVED] Training log -> {log_path}")
 
     # Save in trainer_state.json format for visualize_results.py
     state_path = os.path.join(OUTPUT_DIR, "trainer_state.json")
@@ -313,13 +317,13 @@ def train_cpu(n_episodes=120, eval_interval=10):
                    for h in history]
     with open(state_path, "w") as f:
         json.dump({"log_history": log_history}, f, indent=2)
-    print(f"[SAVED] Trainer state → {state_path}")
+    print(f"[SAVED] Trainer state -> {state_path}")
 
     # Save final policy
     policy_path = os.path.join(OUTPUT_DIR, "policy_weights.json")
     with open(policy_path, "w") as f:
         json.dump(policy.state_dict(), f, indent=2)
-    print(f"[SAVED] Policy weights → {policy_path}")
+    print(f"[SAVED] Policy weights -> {policy_path}")
 
     # ─── Summary ─────────────────────────────────────────────────
     early = history[:20]

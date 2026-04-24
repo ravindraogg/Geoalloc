@@ -20,7 +20,8 @@ from env.tasks.hard import make_hard_env
 IMAGE_NAME = os.getenv("IMAGE_NAME") or os.getenv("LOCAL_IMAGE_NAME")
 API_KEY = os.getenv("HF_TOKEN") or os.getenv("API_KEY")
 API_BASE_URL = os.getenv("API_BASE_URL") or "https://api.openai.com/v1"
-MODEL_NAME = os.getenv("MODEL_NAME") or "gpt-4o-mini"
+MODEL_NAME = os.getenv("MODEL_NAME") or "LOCAL_STRATEGIC"
+WEIGHTS_PATH = os.path.join("geoalloc_agent_grpo", "policy_weights.json")
 
 # ── setup ──────────────────────────────────────────────────────────────────────
 client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY if API_KEY else "no-key")
@@ -56,7 +57,44 @@ def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> No
     rewards_str = ",".join(f"{r:.2f}" for r in rewards)
     print(f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}", flush=True)
 
+def ask_local_strategic(observation_dict: dict) -> dict:
+    """Uses the trained strategic heuristic weights."""
+    try:
+        with open(WEIGHTS_PATH, "r") as f:
+            weights = json.load(f)
+    except:
+        weights = {"tension_threshold": 0.4, "stability_target": 0.6, "amount_fraction": 0.5}
+
+    tension = observation_dict.get("global_tension", 0.0)
+    oil = observation_dict.get("available_oil", 0)
+    countries = observation_dict.get("countries", [])
+
+    # STRATEGIC DELAY: Hold if tension is above threshold
+    if tension > weights["tension_threshold"]:
+        return {"type": "no_op"}
+
+    if oil <= 0:
+        return {"type": "no_op"}
+
+    # Target the least stable country that hasn't met target
+    candidates = [c for c in countries if c["stability"] < weights["stability_target"]]
+    if not candidates:
+        return {"type": "no_op"}
+
+    # Sort by refinery capacity (strategic preference)
+    candidates.sort(key=lambda x: (-x.get("refinery_capacity", 0.5), x["stability"]))
+    target = candidates[0]
+    
+    amount = min(int(oil * weights["amount_fraction"]), oil)
+    if amount < 1:
+        return {"type": "no_op"}
+
+    return {"type": "allocate", "country_id": target["id"], "amount": amount}
+
 def ask_model(observation_dict: dict) -> dict:
+    if MODEL_NAME == "LOCAL_STRATEGIC":
+        return ask_local_strategic(observation_dict)
+    
     user_msg = json.dumps(observation_dict, indent=2)
     response = client.chat.completions.create(
         model=MODEL_NAME,

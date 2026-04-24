@@ -1,0 +1,80 @@
+{
+  "Random": {
+    "reward": {
+      "mean": 6.5593,
+      "std": 2.8737
+    },
+    "final_tension": {
+      "mean": 0.2751,
+      "std": 0.3433
+    },
+    "avg_stability": {
+      "mean": 0.7451,
+      "std": 0.1813
+    },
+    "resource_efficiency": {
+      "mean": 0.2967,
+      "std": 0.0915
+    },
+    "no_op_ratio": {
+      "mean": 0.5157,
+      "std": 0.118
+    },
+    "strategic_delays": {
+      "mean": 1.41,
+      "std": 2.598
+    }
+  },
+  "Greedy": {
+    "reward": {
+      "mean": 7.0571,
+      "std": 4.0151
+    },
+    "final_tension": {
+      "mean": 0.297,
+      "std": 0.3193
+    },
+    "avg_stability": {
+      "mean": 0.8186,
+      "std": 0.1877
+    },
+    "resource_efficiency": {
+      "mean": 0.3374,
+      "std": 0.1095
+    },
+    "no_op_ratio": {
+      "mean": 0.7495,
+      "std": 0.0411
+    },
+    "strategic_delays": {
+      "mean": 3.96,
+      "std": 5.671
+    }
+  },
+  "Strategic (Ours)": {
+    "reward": {
+      "mean": 6.4518,
+      "std": 2.5936
+    },
+    "final_tension": {
+      "mean": 0.2227,
+      "std": 0.305
+    },
+    "avg_stability": {
+      "mean": 0.6673,
+      "std": 0.1484
+    },
+    "resource_efficiency": {
+      "mean": 0.2421,
+      "std": 0.097
+    },
+    "no_op_ratio": {
+      "mean": 0.557,
+      "std": 0.2784
+    },
+    "strategic_delays": {
+      "mean": 3.63,
+      "std": 5.1984
+    }
+  }
+}

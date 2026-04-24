@@ -1,0 +1,2042 @@
+[
+  {
+    "episode": 1,
+    "reward": 6.494,
+    "avg_reward": 6.494,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.3,
+      "stability_target": 0.5,
+      "amount_fraction": 0.8
+    }
+  },
+  {
+    "episode": 2,
+    "reward": 4.3702,
+    "avg_reward": 5.4321,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.289381,
+      "stability_target": 0.4957524,
+      "amount_fraction": 0.8063714000000001
+    }
+  },
+  {
+    "episode": 3,
+    "reward": 5.8,
+    "avg_reward": 5.5547,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.29183366666666666,
+      "stability_target": 0.4967334666666666,
+      "amount_fraction": 0.8048998
+    }
+  },
+  {
+    "episode": 4,
+    "reward": 6.494,
+    "avg_reward": 5.7895,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29887816666666667,
+      "stability_target": 0.4995512666666666,
+      "amount_fraction": 0.8006731
+    }
+  },
+  {
+    "episode": 5,
+    "reward": 4.4533,
+    "avg_reward": 5.5223,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2881879,
+      "stability_target": 0.49527515999999994,
+      "amount_fraction": 0.80708726
+    }
+  },
+  {
+    "episode": 6,
+    "reward": 5.8,
+    "avg_reward": 5.5686,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2905021222222222,
+      "stability_target": 0.4962008488888888,
+      "amount_fraction": 0.8056987266666666
+    }
+  },
+  {
+    "episode": 7,
+    "reward": 6.494,
+    "avg_reward": 5.7008,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2984343126984127,
+      "stability_target": 0.499373725079365,
+      "amount_fraction": 0.8009394123809523
+    }
+  },
+  {
+    "episode": 8,
+    "reward": 4.4533,
+    "avg_reward": 5.5448,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2875185626984127,
+      "stability_target": 0.495007425079365,
+      "amount_fraction": 0.8074888623809523
+    }
+  },
+  {
+    "episode": 9,
+    "reward": 5.8,
+    "avg_reward": 5.5732,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2897866367724868,
+      "stability_target": 0.49591465470899465,
+      "amount_fraction": 0.8061280179365079
+    }
+  },
+  {
+    "episode": 10,
+    "reward": 6.494,
+    "avg_reward": 5.6653,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29807390343915346,
+      "stability_target": 0.4992295613756613,
+      "amount_fraction": 0.8011556579365079
+    }
+  },
+  {
+    "episode": 11,
+    "reward": 4.4533,
+    "avg_reward": 5.5551,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28705566101491103,
+      "stability_target": 0.4948222644059644,
+      "amount_fraction": 0.8077666033910533
+    }
+  },
+  {
+    "episode": 12,
+    "reward": 5.8,
+    "avg_reward": 5.5755,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28930066101491103,
+      "stability_target": 0.4957202644059644,
+      "amount_fraction": 0.8064196033910533
+    }
+  },
+  {
+    "episode": 13,
+    "reward": 6.494,
+    "avg_reward": 5.6462,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2977791225533726,
+      "stability_target": 0.499111649021349,
+      "amount_fraction": 0.8013325264679764
+    }
+  },
+  {
+    "episode": 14,
+    "reward": 4.4533,
+    "avg_reward": 5.5609,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28670231302956306,
+      "stability_target": 0.4946809252118252,
+      "amount_fraction": 0.8079786121822621
+    }
+  },
+  {
+    "episode": 15,
+    "reward": 5.8,
+    "avg_reward": 5.5769,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2889334685851186,
+      "stability_target": 0.49557338743404744,
+      "amount_fraction": 0.8066399188489287
+    }
+  },
+  {
+    "episode": 16,
+    "reward": 6.494,
+    "avg_reward": 5.6342,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2975314269184519,
+      "stability_target": 0.49901257076738076,
+      "amount_fraction": 0.8014811438489288
+    }
+  },
+  {
+    "episode": 17,
+    "reward": 4.4533,
+    "avg_reward": 5.5647,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.286416721036099,
+      "stability_target": 0.49456668841443957,
+      "amount_fraction": 0.8081499673783406
+    }
+  },
+  {
+    "episode": 18,
+    "reward": 5.8,
+    "avg_reward": 5.5778,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2886386469620249,
+      "stability_target": 0.49545545878480995,
+      "amount_fraction": 0.806816811822785
+    }
+  },
+  {
+    "episode": 19,
+    "reward": 6.494,
+    "avg_reward": 5.626,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29731836626027053,
+      "stability_target": 0.4989273465041082,
+      "amount_fraction": 0.8016089802438376
+    }
+  },
+  {
+    "episode": 20,
+    "reward": 4.4533,
+    "avg_reward": 5.5674,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2861771329269372,
+      "stability_target": 0.4944708531707749,
+      "amount_fraction": 0.8082937202438376
+    }
+  },
+  {
+    "episode": 21,
+    "reward": 5.8,
+    "avg_reward": 5.5327,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269372,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438376
+    }
+  },
+  {
+    "episode": 22,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693716,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438376
+    }
+  },
+  {
+    "episode": 23,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602705,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438375
+    }
+  },
+  {
+    "episode": 24,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269371,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438375
+    }
+  },
+  {
+    "episode": 25,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269371,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438375
+    }
+  },
+  {
+    "episode": 26,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602704,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438374
+    }
+  },
+  {
+    "episode": 27,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693707,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438374
+    }
+  },
+  {
+    "episode": 28,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693705,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438373
+    }
+  },
+  {
+    "episode": 29,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626027037,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438373
+    }
+  },
+  {
+    "episode": 30,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.288850232926937,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438373
+    }
+  },
+  {
+    "episode": 31,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.297401432926937,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438372
+    }
+  },
+  {
+    "episode": 32,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602703,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438372
+    }
+  },
+  {
+    "episode": 33,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693696,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438372
+    }
+  },
+  {
+    "episode": 34,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693694,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438371
+    }
+  },
+  {
+    "episode": 35,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626027026,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438371
+    }
+  },
+  {
+    "episode": 36,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269369,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.806689860243837
+    }
+  },
+  {
+    "episode": 37,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269369,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.801559140243837
+    }
+  },
+  {
+    "episode": 38,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602702,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.808268800243837
+    }
+  },
+  {
+    "episode": 39,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693685,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438369
+    }
+  },
+  {
+    "episode": 40,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269368,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438369
+    }
+  },
+  {
+    "episode": 41,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626027015,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438368
+    }
+  },
+  {
+    "episode": 42,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269368,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438368
+    }
+  },
+  {
+    "episode": 43,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693677,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438368
+    }
+  },
+  {
+    "episode": 44,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602701,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438367
+    }
+  },
+  {
+    "episode": 45,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693673,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438367
+    }
+  },
+  {
+    "episode": 46,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269367,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438367
+    }
+  },
+  {
+    "episode": 47,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626027004,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438366
+    }
+  },
+  {
+    "episode": 48,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269367,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438366
+    }
+  },
+  {
+    "episode": 49,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693666,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438366
+    }
+  },
+  {
+    "episode": 50,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626027,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438365
+    }
+  },
+  {
+    "episode": 51,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269366,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438365
+    }
+  },
+  {
+    "episode": 52,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269366,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438365
+    }
+  },
+  {
+    "episode": 53,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602699,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438364
+    }
+  },
+  {
+    "episode": 54,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693657,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438364
+    }
+  },
+  {
+    "episode": 55,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693655,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438363
+    }
+  },
+  {
+    "episode": 56,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026987,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438363
+    }
+  },
+  {
+    "episode": 57,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269365,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438363
+    }
+  },
+  {
+    "episode": 58,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269365,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438362
+    }
+  },
+  {
+    "episode": 59,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602698,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438362
+    }
+  },
+  {
+    "episode": 60,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693646,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438362
+    }
+  },
+  {
+    "episode": 61,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693644,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438361
+    }
+  },
+  {
+    "episode": 62,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026976,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438361
+    }
+  },
+  {
+    "episode": 63,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269364,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.806689860243836
+    }
+  },
+  {
+    "episode": 64,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269364,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.801559140243836
+    }
+  },
+  {
+    "episode": 65,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602697,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.808268800243836
+    }
+  },
+  {
+    "episode": 66,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693635,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438359
+    }
+  },
+  {
+    "episode": 67,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269363,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438359
+    }
+  },
+  {
+    "episode": 68,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026965,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438358
+    }
+  },
+  {
+    "episode": 69,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269363,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438358
+    }
+  },
+  {
+    "episode": 70,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693627,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438358
+    }
+  },
+  {
+    "episode": 71,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602696,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438357
+    }
+  },
+  {
+    "episode": 72,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693623,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438357
+    }
+  },
+  {
+    "episode": 73,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269362,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438357
+    }
+  },
+  {
+    "episode": 74,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026954,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438356
+    }
+  },
+  {
+    "episode": 75,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269362,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438356
+    }
+  },
+  {
+    "episode": 76,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693616,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438356
+    }
+  },
+  {
+    "episode": 77,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602695,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438355
+    }
+  },
+  {
+    "episode": 78,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269361,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438355
+    }
+  },
+  {
+    "episode": 79,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269361,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438355
+    }
+  },
+  {
+    "episode": 80,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602694,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438354
+    }
+  },
+  {
+    "episode": 81,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693607,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438354
+    }
+  },
+  {
+    "episode": 82,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693605,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438353
+    }
+  },
+  {
+    "episode": 83,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026937,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438353
+    }
+  },
+  {
+    "episode": 84,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.288850232926936,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438353
+    }
+  },
+  {
+    "episode": 85,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.297401432926936,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438352
+    }
+  },
+  {
+    "episode": 86,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602693,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438352
+    }
+  },
+  {
+    "episode": 87,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693596,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438352
+    }
+  },
+  {
+    "episode": 88,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693594,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438351
+    }
+  },
+  {
+    "episode": 89,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026926,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438351
+    }
+  },
+  {
+    "episode": 90,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269359,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.806689860243835
+    }
+  },
+  {
+    "episode": 91,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269359,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.801559140243835
+    }
+  },
+  {
+    "episode": 92,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602692,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.808268800243835
+    }
+  },
+  {
+    "episode": 93,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693585,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438349
+    }
+  },
+  {
+    "episode": 94,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269358,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438349
+    }
+  },
+  {
+    "episode": 95,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026915,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438349
+    }
+  },
+  {
+    "episode": 96,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269358,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438348
+    }
+  },
+  {
+    "episode": 97,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693577,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438348
+    }
+  },
+  {
+    "episode": 98,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602691,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438347
+    }
+  },
+  {
+    "episode": 99,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693573,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438347
+    }
+  },
+  {
+    "episode": 100,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269357,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438347
+    }
+  },
+  {
+    "episode": 101,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026904,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438346
+    }
+  },
+  {
+    "episode": 102,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269357,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438346
+    }
+  },
+  {
+    "episode": 103,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693566,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438346
+    }
+  },
+  {
+    "episode": 104,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.286218666260269,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438345
+    }
+  },
+  {
+    "episode": 105,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269356,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438345
+    }
+  },
+  {
+    "episode": 106,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269356,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438345
+    }
+  },
+  {
+    "episode": 107,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026893,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438344
+    }
+  },
+  {
+    "episode": 108,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693557,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438344
+    }
+  },
+  {
+    "episode": 109,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693555,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438343
+    }
+  },
+  {
+    "episode": 110,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602689,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438343
+    }
+  },
+  {
+    "episode": 111,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269355,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438343
+    }
+  },
+  {
+    "episode": 112,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269355,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438342
+    }
+  },
+  {
+    "episode": 113,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602688,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438342
+    }
+  },
+  {
+    "episode": 114,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693546,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438342
+    }
+  },
+  {
+    "episode": 115,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.29740143292693544,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.8015591402438341
+    }
+  },
+  {
+    "episode": 116,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.28621866626026876,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.8082688002438341
+    }
+  },
+  {
+    "episode": 117,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.2888502329269354,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.806689860243834
+    }
+  },
+  {
+    "episode": 118,
+    "reward": 6.494,
+    "avg_reward": 5.6389,
+    "tier": "medium",
+    "steps": 12,
+    "final_tension": 0.0,
+    "avg_stability": 0.5667,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 12,
+    "policy": {
+      "tension_threshold": 0.2974014329269354,
+      "stability_target": 0.49896057317077486,
+      "amount_fraction": 0.801559140243834
+    }
+  },
+  {
+    "episode": 119,
+    "reward": 4.4533,
+    "avg_reward": 5.5715,
+    "tier": "hard",
+    "steps": 15,
+    "final_tension": 0.48,
+    "avg_stability": 0.4576,
+    "no_op_ratio": 0.8667,
+    "alloc_count": 2,
+    "no_op_count": 13,
+    "policy": {
+      "tension_threshold": 0.2862186662602687,
+      "stability_target": 0.4944874665041082,
+      "amount_fraction": 0.808268800243834
+    }
+  },
+  {
+    "episode": 120,
+    "reward": 5.8,
+    "avg_reward": 5.5368,
+    "tier": "easy",
+    "steps": 10,
+    "final_tension": 0.0,
+    "avg_stability": 0.6,
+    "no_op_ratio": 1.0,
+    "alloc_count": 0,
+    "no_op_count": 10,
+    "policy": {
+      "tension_threshold": 0.28885023292693535,
+      "stability_target": 0.49554009317077485,
+      "amount_fraction": 0.8066898602438339
+    }
+  }
+]

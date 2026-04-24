@@ -1,12 +1,12 @@
 from __future__ import annotations
-import copy
 from typing import Optional
 
-from env.models import (
+from shared.models import (
     Action,
     CountryObservation,
     CountryState,
     EnvState,
+    EvalMetrics,
     Observation,
     StepInfo,
     StepResult,
@@ -56,13 +56,14 @@ class GeoAllocEnv:
         action_valid = True
         error: Optional[str] = None
         prev_tension = self._state.global_tension
+        prev_avg_stability = sum(c.stability for c in self._state.countries) / len(self._state.countries)
 
         # 1. Process Delayed Refining Effects (from previous step)
         for country in self._state.countries:
             if country.refined_buffer > 0:
                 refined_gain = REFINERY_BETA * (country.refined_buffer / country.demand if country.demand > 0 else 0)
                 country.stability = min(1.0, country.stability + refined_gain)
-                country.refined_buffer = 0.0 # Clear buffer
+                country.refined_buffer = 0.0  # Clear buffer
 
         # 2. Process Current Action
         if action.type == "allocate":
@@ -91,6 +92,24 @@ class GeoAllocEnv:
             total_demand=self._total_demand,
         )
 
+        # Build eval metrics
+        total_received = sum(c.received for c in self._state.countries)
+        active_buffers = sum(1 for c in self._state.countries if c.refined_buffer > 0)
+        strategic_delay = (
+            action.type == "no_op"
+            and tension_decreased
+            and unmet_demand_ratio > 0
+            and self._state.global_tension > 0.6
+        )
+
+        eval_metrics = EvalMetrics(
+            stability_delta=avg_stability - prev_avg_stability,
+            tension_delta=self._state.global_tension - prev_tension,
+            strategic_delay_used=strategic_delay,
+            resource_efficiency=total_received / self._total_demand if self._total_demand > 0 else 0.0,
+            refinery_utilization=active_buffers / len(self._state.countries),
+        )
+
         obs = self._make_observation()
         info = StepInfo(
             waste=self._waste,
@@ -98,6 +117,7 @@ class GeoAllocEnv:
             avg_stability=avg_stability,
             action_valid=action_valid,
             error=error,
+            eval_metrics=eval_metrics,
         )
 
         return obs, reward, done, info
@@ -188,18 +208,43 @@ class GeoAllocEnv:
 
     def predict_outcome(self, action: Action) -> dict:
         """
-        Simulate the outcome of an action without mutating the state.
+        Analytically compute the expected deltas without mutating state.
+        Uses delta math instead of deepcopy for O(1) performance.
         """
-        temp_env = copy.deepcopy(self)
-        current_stability = sum(c.stability for c in self._state.countries) / len(self._state.countries)
-        current_tension = self._state.global_tension
-        
-        temp_env.step(action)
-        
-        new_stability = sum(c.stability for c in temp_env._state.countries) / len(temp_env._state.countries)
-        new_tension = temp_env._state.global_tension
-        
+        n = len(self._state.countries)
+        stability_delta = 0.0
+        tension_delta = -TENSION_DECAY  # Decay always happens
+
+        # 1. Refining effects (buffers from previous step)
+        for c in self._state.countries:
+            if c.refined_buffer > 0:
+                gain = REFINERY_BETA * (c.refined_buffer / c.demand if c.demand > 0 else 0)
+                stability_delta += min(gain, 1.0 - c.stability) / n
+
+        # 2. Action effects
+        if action.type == "allocate" and action.country_id and action.amount:
+            country = self._find_country(action.country_id)
+            if country and action.amount <= self._state.available_oil:
+                demand = country.demand
+                capacity = country.refinery_capacity
+                direct = action.amount * (1 - capacity)
+                direct_ratio = direct / demand if demand > 0 else 0.0
+                imm_gain = ALPHA * direct_ratio
+                stability_delta += min(imm_gain, 1.0 - country.stability) / n
+
+                # Tension increase from enemies
+                if country.enemies:
+                    total_ratio = action.amount / demand if demand > 0 else 0.0
+                    tension_delta += TENSION_BETA * total_ratio * len(country.enemies)
+
+        # Clamp tension delta to valid range
+        new_tension = self._state.global_tension + tension_delta
+        if new_tension < 0.0:
+            tension_delta = -self._state.global_tension
+        elif new_tension > 1.0:
+            tension_delta = 1.0 - self._state.global_tension
+
         return {
-            "stability_delta": new_stability - current_stability,
-            "tension_delta": new_tension - current_tension
+            "stability_delta": round(stability_delta, 6),
+            "tension_delta": round(tension_delta, 6),
         }

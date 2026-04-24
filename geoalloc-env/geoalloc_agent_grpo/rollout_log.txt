@@ -1,0 +1,71 @@
+======================================================================
+GeoAlloc Round 2 -- Strategic Rollout Log (Hard Scenario)
+======================================================================
+Countries: ['ares', 'zeus', 'hera', 'poseidon', 'athena']
+Oil: 160 | Tension: 0.30
+
+[STEP  1] ALLOCATE 30u -> zeus (refinery=0.7)
+         reward=+0.200  tension=0.430  stability=0.329  oil=130
+         d_stab=+0.0090  d_tens=+0.1300  efficiency=0.03
+
+[STEP  2] ALLOCATE 25u -> zeus (refinery=0.7)
+         reward=+0.171  tension=0.535  stability=0.371  oil=105
+         d_stab=+0.0425  d_tens=+0.1050  efficiency=0.06
+
+[STEP  3] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.215  tension=0.515  stability=0.401  oil=105
+         d_stab=+0.0292  d_tens=-0.0200  efficiency=0.06
+
+[STEP  4] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.229  tension=0.495  stability=0.401  oil=105
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.06
+
+[STEP  5] ALLOCATE 21u -> zeus (refinery=0.7)
+         reward=+0.171  tension=0.580  stability=0.407  oil=84
+         d_stab=+0.0063  d_tens=+0.0850  efficiency=0.08
+
+[STEP  6] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.212  tension=0.560  stability=0.431  oil=84
+         d_stab=+0.0245  d_tens=-0.0200  efficiency=0.08
+
+[STEP  7] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.227  tension=0.540  stability=0.431  oil=84
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.08
+
+[STEP  8] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.242  tension=0.520  stability=0.431  oil=84
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.08
+
+[STEP  9] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.256  tension=0.500  stability=0.431  oil=84
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.08
+
+[STEP 10] ALLOCATE 18u -> zeus (refinery=0.7)
+         reward=+0.209  tension=0.570  stability=0.437  oil=66
+         d_stab=+0.0054  d_tens=+0.0700  efficiency=0.09
+
+[STEP 11] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.246  tension=0.550  stability=0.458  oil=66
+         d_stab=+0.0210  d_tens=-0.0200  efficiency=0.09
+
+[STEP 12] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.261  tension=0.530  stability=0.458  oil=66
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.09
+
+[STEP 13] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.276  tension=0.510  stability=0.458  oil=66
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.09
+
+[STEP 14] STRATEGIC DELAY -- tension too high, waiting for decay
+         reward=+0.290  tension=0.490  stability=0.458  oil=66
+         d_stab=+0.0000  d_tens=-0.0200  efficiency=0.09
+
+[STEP 15] ALLOCATE 15u -> zeus (refinery=0.7)
+         reward=+0.552  tension=0.545  stability=0.460  oil=51
+         d_stab=+0.0021  d_tens=+0.0550  efficiency=0.11
+
+[RESULT] Episode Complete
+  Final Tension:   0.545
+  Final Stability: 0.460
+  Total Reward:    0
+  Total Steps:     15
