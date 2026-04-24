@@ -1,68 +1,29 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
-#
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree.
-
-# Multi-stage build using openenv-base
+# Use the openenv-base image which has CUDA and Python 3.12
 ARG BASE_IMAGE=ghcr.io/meta-pytorch/openenv-base:latest
-FROM ${BASE_IMAGE} AS builder
-
-WORKDIR /app
-
-# Ensure git is available
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends git && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy environment code
-COPY . /app/env
-
-WORKDIR /app/env
-
-# Ensure uv is available
-RUN if ! command -v uv >/dev/null 2>&1; then \
-        curl -LsSf https://astral.sh/uv/install.sh | f && \
-        mv /root/.local/bin/uv /usr/local/bin/uv && \
-        mv /root/.local/bin/uvx /usr/local/bin/uvx; \
-    fi
-    
-# Install dependencies using uv sync
-RUN --mount=type=cache,target=/root/.cache/uv \
-    if [ -f uv.lock ]; then \
-        uv sync --frozen --no-install-project --no-editable; \
-    else \
-        uv sync --no-install-project --no-editable; \
-    fi
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    if [ -f uv.lock ]; then \
-        uv sync --frozen --no-editable; \
-    else \
-        uv sync --no-editable; \
-    fi
-
-# Final runtime stage
 FROM ${BASE_IMAGE}
 
 WORKDIR /app
 
-# Copy the virtual environment from builder
-COPY --from=builder /app/env/.venv /app/.venv
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy the environment code
-COPY --from=builder /app/env /app/env
+# Copy the project files
+COPY . /app/env
+WORKDIR /app/env
 
-# Set PATH to use the virtual environment
-ENV PATH="/app/.venv/bin:$PATH"
+# Install Python dependencies globally
+# We explicitly install openenv-core[core] which was missing
+RUN pip install --no-cache-dir "openenv-core[core]>=0.2.2"
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir unsloth trl huggingface_hub
 
-# Set PYTHONPATH so imports work correctly
+# Set PYTHONPATH so the server and training script can find the 'env' module
 ENV PYTHONPATH="/app/env:$PYTHONPATH"
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:7860/health || exit 1
+# Expose port 7860 for Hugging Face
+EXPOSE 7860
 
 # Run the FastAPI server
-# The module path is constructed to work with the /app/env structure
-CMD ["sh", "-c", "cd /app/env && uvicorn server.app:app --host 0.0.0.0 --port 7860"]
+CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "7860"]

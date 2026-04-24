@@ -2,9 +2,9 @@ import os
 import torch
 import json
 from tqdm import tqdm
+from unsloth import FastLanguageModel, PatchFastRL
 from trl import GRPOTrainer, GRPOConfig
 from transformers import AutoTokenizer
-from unsloth import FastLanguageModel, PatchFastRL
 from datasets import Dataset
 
 # Project Imports
@@ -17,11 +17,12 @@ PatchFastRL("GRPO", FastLanguageModel)
 
 # 1. Configuration
 MODEL_NAME = "unsloth/llama-3-8b-bnb-4bit"
-MAX_SEQ_LENGTH = 1024 # Increased for reasoning traces
+MAX_SEQ_LENGTH = 1024 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 OUTPUT_DIR = "./geoalloc_agent_grpo"
 
 # 2. Load Model & Tokenizer with Unsloth
+print(f"Loading model {MODEL_NAME} onto {DEVICE}...")
 model, tokenizer = FastLanguageModel.from_pretrained(
     model_name=MODEL_NAME,
     max_seq_length=MAX_SEQ_LENGTH,
@@ -29,7 +30,6 @@ model, tokenizer = FastLanguageModel.from_pretrained(
     fast_inference=True,
 )
 
-# Unsloth Training Configuration
 model = FastLanguageModel.get_peft_model(
     model,
     r=16,
@@ -41,7 +41,7 @@ model = FastLanguageModel.get_peft_model(
     random_state=42,
 )
 
-# 3. Prompt Template (Updated for Reasoning)
+# 3. Prompt Template
 SYSTEM_PROMPT = """
 You are a Geopolitical Resource Allocator. 
 Objective: Sustain global stability while managing limited oil.
@@ -63,32 +63,21 @@ OR
 
 # 4. GRPO Reward Functions
 def reward_env_step(completions, **kwargs):
-    """
-    Reward based on environment feedback for the action.
-    """
     rewards = []
-    # This expects a single step environment interaction
-    # In a real GRPO loop for long-horizon, we might run full trajectories
     for completion in completions:
         try:
-            # Extract JSON from completion
             json_str = completion.split("</thought>")[-1].strip()
             action_dict = json.loads(json_str)
             action = Action(**action_dict)
             
-            # Create temporary env for evaluation
-            # (In production, you'd pass the specific env state via kwargs)
             env = make_hard_env() 
             result = env.step(action)
             rewards.append(result.reward)
         except Exception:
-            rewards.append(-0.5) # Penalty for invalid format or logic
+            rewards.append(-0.5) 
     return rewards
 
 def reward_reasoning_format(completions, **kwargs):
-    """
-    Reward for using the <thought> tags correctly.
-    """
     rewards = []
     for completion in completions:
         if "<thought>" in completion and "</thought>" in completion:
@@ -108,13 +97,7 @@ def prepare_dataset():
             raw_states = json.load(f)
     
     print(f"Loaded {len(raw_states)} states for training.")
-    
-    prompts = []
-    for state in raw_states:
-        # Create a prompt for each unique state
-        prompt = f"{SYSTEM_PROMPT}\nObservation: {json.dumps(state)}\nAction:"
-        prompts.append({"prompt": prompt})
-        
+    prompts = [{"prompt": f"{SYSTEM_PROMPT}\nObservation: {json.dumps(state)}\nAction:"} for state in raw_states]
     return Dataset.from_list(prompts)
 
 # 6. Training Setup
@@ -124,13 +107,13 @@ def train():
     training_args = GRPOConfig(
         output_dir=OUTPUT_DIR,
         learning_rate=1e-5,
-        per_device_train_batch_size=1,
-        gradient_accumulation_steps=8,
+        per_device_train_batch_size=2, # Increased for 4090
+        gradient_accumulation_steps=4,
         num_train_epochs=1,
         max_prompt_length=768,
         max_completion_length=512,
-        num_generations=4, # Number of trajectories per prompt
-        report_to="none", # Set to "wandb" if you have an account
+        num_generations=8, # High-fidelity reasoning trajectories
+        report_to="none",
         logging_steps=1,
     )
 
@@ -141,16 +124,15 @@ def train():
         train_dataset=dataset,
     )
 
-    print("Starting Round 2 Training: GRPO Strategic Delay Loop...")
+    print("Starting Round 2 Local Training: 4090 GRPO Optimized...")
     trainer.train()
 
-    # Save the fine-tuned adapter
     model.save_pretrained(OUTPUT_DIR)
     tokenizer.save_pretrained(OUTPUT_DIR)
-    print(f"Training Complete. Model saved to {OUTPUT_DIR}")
+    print(f"Training Complete. Local model saved to {OUTPUT_DIR}")
 
 if __name__ == "__main__":
     if DEVICE == "cpu":
-        print("WARNING: GPU not found. Unsloth/GRPO requires a GPU.")
-    
-    train()
+        print("CRITICAL ERROR: No GPU found. GRPO requires CUDA.")
+    else:
+        train()

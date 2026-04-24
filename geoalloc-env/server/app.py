@@ -9,6 +9,8 @@ except Exception as e:
 import sys
 import os
 import json
+import subprocess
+from fastapi import BackgroundTasks
 # Ensure root is in PATH for Docker and local execution
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -31,6 +33,21 @@ async def get_countries():
         with open(file_path, "r") as f:
             return json.load(f)
     return {}
+
+@app.post("/train")
+async def trigger_training(background_tasks: BackgroundTasks):
+    """
+    Triggers the GRPO training loop as a background process on the HF GPU.
+    """
+    def run_training():
+        env_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        train_script = os.path.join(env_dir, "train.py")
+        print(f"[Cloud-Train] Starting background training: {train_script}")
+        # Run using the same python interpreter (which has GPU access in the Space)
+        subprocess.run([sys.executable, train_script], cwd=env_dir)
+
+    background_tasks.add_task(run_training)
+    return {"status": "Training initiated on Hugging Face Cloud", "method": "GRPO", "device": "GPU-Remote"}
 
 app.add_middleware(
     CORSMiddleware,

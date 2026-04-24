@@ -76,3 +76,8 @@ class StepResult(BaseModel):
     reward: float
     done: bool
     info: StepInfo
+
+
+# Compatibility Aliases
+GeoAllocAction = Action
+GeoAllocObservation = Observation
