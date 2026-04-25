@@ -196,7 +196,7 @@ def create_demo():
 
 if __name__ == "__main__":
     demo = create_demo()
-    theme = gr.themes.Slate(
+    theme = gr.themes.Base(
         primary_hue="cyan",
         secondary_hue="blue",
         neutral_hue="slate",
