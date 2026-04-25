@@ -1,0 +1,10 @@
+openenv-core
+fastmcp
+uvicorn[standard]
+fastapi
+pydantic
+torch
+datasets
+transformers
+trl
+unsloth

@@ -11,23 +11,35 @@ This is meant for execution on a machine with at least 1x 24GB GPU (like an RTX 
 """
 
 import os
+import sys
+
+# Disable torch.compile (Inductor allocates huge temp buffers that OOM on 8GB GPUs)
+os.environ["TORCH_COMPILE_DISABLE"] = "1"
+os.environ["TORCHDYNAMO_DISABLE"] = "1"
+
+# Add parent directory to sys.path to import secureheal_arena
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from unsloth import FastLanguageModel, is_bfloat16_supported
 import random
 import torch
 from datasets import Dataset
 from transformers import TrainingArguments
 from trl import GRPOConfig, GRPOTrainer
-from unsloth import FastLanguageModel, is_bfloat16_supported
 
-from secureheal_arena.client import SecureHealEnv
+# Note: SecureHealEnv import removed — using offline heuristic rewards for training.
+# To use live env rewards, start the server and re-enable env_reward_function.
 
 # ────────────────────── Config ──────────────────────────────
 
-MODEL_NAME = "unsloth/Meta-Llama-3-8B-Instruct"
-MAX_SEQ_LENGTH = 4096
-LORA_RANK = 16
-BATCH_SIZE = 4
-GRADIENT_ACCUMULATION_STEPS = 4
+MODEL_NAME = "unsloth/llama-3-8b-Instruct-bnb-4bit"
+MAX_SEQ_LENGTH = 1024          # Reduced from 4096 to fit in 8GB VRAM
+LORA_RANK = 8                   # Reduced from 16 to save memory
+BATCH_SIZE = 1                  # Reduced from 4 — minimum for 8GB GPU
+GRADIENT_ACCUMULATION_STEPS = 16  # Increased to keep effective batch = 16
 MAX_STEPS = 500
+NUM_GENERATIONS = 2             # GRPO generations per prompt (default can be 4-8)
+MAX_COMPLETION_LENGTH = 128     # Max tokens generated per completion
 
 # ────────────────────── Dataset ─────────────────────────────
 
@@ -46,53 +58,94 @@ def build_training_dataset():
     
     # Repeat to create a reasonably sized dataset
     dataset_dict = {
-        "prompt": [{"role": "user", "content": random.choice(prompts)} for _ in range(1000)]
+        "prompt": [[{"role": "user", "content": random.choice(prompts)}] for _ in range(1000)]
     }
     return Dataset.from_dict(dataset_dict)
 
 
 # ────────────────────── Reward Pipeline ───────────────────────
+# Offline heuristic rewards — no SecureHeal server needed.
+# These evaluate the model's completions based on content quality.
 
-def env_reward_function(prompts, completions, **kwargs):
+# Valid tool names from the SecureHeal environment
+VALID_TOOLS = {
+    "scan_code", "simulate_attack", "apply_patch", "run_tests",
+    "restart_service", "clean_data", "reallocate_resources", "classify_issue",
+}
+
+def tool_usage_reward(prompts, completions, **kwargs):
     """
-    TRL GRPO reward function.
-    Takes the model's generated completions, executes them in the SecureHeal
-    OpenEnv environment, and returns the total reward.
+    R1: Rewards the model for mentioning valid SecureHeal tool names.
+    Higher reward for using more distinct tools (encourages multi-step plans).
     """
     rewards = []
-    
-    for prompt, completion in zip(prompts, completions):
-        # Initialize client to the local environment server
-        with SecureHealEnv(base_url="http://localhost:8000").sync() as env:
-            # We assume the server is running curriculum level 1 or 2 during early training
-            obs = env.reset()
-            
-            # Here, a custom orchestrator would parse the completion (if multi-step),
-            # or if the completion is a single script/action block, execute it.
-            # For simplicity in this template, we assume the completion contains 
-            # a sequence of tool calls or a final answer that we evaluate.
-            
-            # Retrieve the final state to get the actual environment reward
-            final_state = env.state()
-            
-            # The environment already tracks total reward internally
-            # For GRPO, we return a float score for the completion.
-            score = final_state.total_reward
-            rewards.append(score)
-            
+    for completion in completions:
+        text = completion[0]["content"].lower()
+        tools_used = sum(1 for tool in VALID_TOOLS if tool in text)
+        # Scale: 0 tools = -0.5, 1 tool = 0.0, 4+ tools = 1.0
+        score = min((tools_used - 1) / 3.0, 1.0) if tools_used > 0 else -0.5
+        rewards.append(score)
     return rewards
 
 def format_reward_function(prompts, completions, **kwargs):
     """
-    Bonus reward for outputting correctly formatted JSON/XML tool calls.
-    Penalizes the model if it hallucinates non-existent tools.
+    R2: Rewards structured output (XML tool calls, JSON, or numbered steps).
+    Penalizes unstructured prose-only responses.
     """
     rewards = []
     for completion in completions:
-        if "<tool_call>" in completion[0]['content']:
-            rewards.append(0.5)
+        text = completion[0]["content"]
+        score = 0.0
+        if "<tool_call>" in text or "</tool_call>" in text:
+            score += 0.5
+        if "{" in text and "}" in text:  # JSON-like structure
+            score += 0.2
+        if any(f"{i}." in text or f"Step {i}" in text for i in range(1, 6)):
+            score += 0.3  # Numbered steps = structured plan
+        if score == 0.0:
+            score = -0.3  # Penalize pure prose
+        rewards.append(min(score, 1.0))
+    return rewards
+
+def reasoning_reward(prompts, completions, **kwargs):
+    """
+    R3: Rewards multi-step reasoning and security-relevant analysis.
+    Checks for diagnostic keywords that indicate the model is actually
+    reasoning about vulnerabilities and system recovery.
+    """
+    REASONING_KEYWORDS = [
+        "vulnerability", "exploit", "patch", "injection", "xss",
+        "latency", "memory", "cpu", "restart", "failure",
+        "root cause", "diagnosis", "fix", "remediat", "mitigat",
+        "test", "verify", "monitor", "stable", "recover",
+    ]
+    rewards = []
+    for completion in completions:
+        text = completion[0]["content"].lower()
+        hits = sum(1 for kw in REASONING_KEYWORDS if kw in text)
+        # Scale: 0 hits = -0.3, 3 hits = 0.3, 6+ hits = 1.0
+        score = min((hits - 1) / 5.0, 1.0) if hits > 0 else -0.3
+        rewards.append(score)
+    return rewards
+
+def quality_reward(prompts, completions, **kwargs):
+    """
+    R4: Rewards completions of reasonable length. Penalizes very short
+    (lazy) or excessively long (rambling) outputs.
+    """
+    rewards = []
+    for completion in completions:
+        text = completion[0]["content"]
+        word_count = len(text.split())
+        if word_count < 15:
+            score = -0.5   # Too short / empty
+        elif word_count < 30:
+            score = 0.0    # Marginal
+        elif word_count <= 150:
+            score = 0.5    # Good length
         else:
-            rewards.append(-0.5)
+            score = 0.2    # Verbose but not terrible
+        rewards.append(score)
     return rewards
 
 
@@ -135,13 +188,16 @@ def main():
         bf16=is_bfloat16_supported(),
         fp16=not is_bfloat16_supported(),
         # GRPO specific parameters
-        beta=0.1,  # KL penalty coefficient
+        beta=0.1,                                   # KL penalty coefficient
+        num_generations=NUM_GENERATIONS,             # Fewer generations = less VRAM
+        max_completion_length=MAX_COMPLETION_LENGTH,  # Shorter completions = less VRAM
+        torch_compile=False,                         # Disable compile to avoid huge temp buffers
     )
 
     trainer = GRPOTrainer(
         model=model,
         processing_class=tokenizer,
-        reward_funcs=[env_reward_function, format_reward_function],
+        reward_funcs=[tool_usage_reward, format_reward_function, reasoning_reward, quality_reward],
         args=training_args,
         train_dataset=dataset,
     )
