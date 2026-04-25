@@ -1,6 +1,4 @@
-# training/Dockerfile.training
-# Optimized for Hugging Face Spaces GPU (A10G / L4)
-
+# Unified Dockerfile for SecureHeal Arena (Environment + Training)
 FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
 
 # Set environment variables
@@ -16,31 +14,21 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     git \
     curl \
+    libgoogle-perftools-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies (Unsloth + TRL)
-RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-RUN pip install --no-cache-dir \
-    "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git" \
-    trl \
-    peft \
-    accelerate \
-    bitsandbytes \
-    datasets \
-    transformers \
-    fastapi \
-    uvicorn \
-    wandb \
-    openenv-core
+# Upgrade pip and install unified requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy the project files
+# Copy the entire project
 COPY . .
 
-# Expose port for optional monitoring UI
-EXPOSE 7860
+# Expose port for the environment server
+EXPOSE 8000
 
-# Command to run:
-# 1. Start the environment server in the background
-# 2. Start the training script
+# Entrypoint: Start the environment server AND the training loop
+# This allows the reward function to talk to localhost:8000
 CMD uvicorn secureheal_arena.server.app:app --host 0.0.0.0 --port 8000 & \
     python3 training/train.py
