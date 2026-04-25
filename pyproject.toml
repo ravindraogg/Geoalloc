@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "secureheal-arena"
+version = "0.1.0"
+description = "SecureHeal Arena — a merged RL environment for cybersecurity vulnerability detection/patching + autonomous system recovery"
+readme = "README.md"
+license = {text = "BSD-3-Clause"}
+requires-python = ">=3.10"
+dependencies = [
+    "openenv-core",
+    "fastmcp",
+    "uvicorn[standard]",
+    "fastapi",
+    "pydantic",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[tool.setuptools.packages.find]
+include = ["secureheal_arena*"]
