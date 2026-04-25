@@ -18,6 +18,7 @@ from transformers import TrainingArguments
 from trl import GRPOConfig, GRPOTrainer
 from unsloth import FastLanguageModel, is_bfloat16_supported
 
+import wandb
 from secureheal_arena.client import SecureHealEnv
 
 # ────────────────────── Config ──────────────────────────────
@@ -25,9 +26,10 @@ from secureheal_arena.client import SecureHealEnv
 MODEL_NAME = "unsloth/Meta-Llama-3-8B-Instruct"
 MAX_SEQ_LENGTH = 4096
 LORA_RANK = 16
-BATCH_SIZE = 4
-GRADIENT_ACCUMULATION_STEPS = 4
-MAX_STEPS = 500
+BATCH_SIZE = 2 # Reduced for A10G memory safety
+GRADIENT_ACCUMULATION_STEPS = 8
+MAX_STEPS = 100 # Verification run (approx 1-2 hours)
+WANDB_PROJECT = "secureheal-arena-grpo"
 
 # ────────────────────── Dataset ─────────────────────────────
 
@@ -99,6 +101,10 @@ def format_reward_function(prompts, completions, **kwargs):
 # ────────────────────── Main Training Loop ─────────────────────
 
 def main():
+    # Login to WandB if API key is provided
+    if os.getenv("WANDB_API_KEY"):
+        wandb.login()
+    
     print("Initializing Unsloth FastLanguageModel...")
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=MODEL_NAME,
@@ -130,12 +136,18 @@ def main():
         per_device_train_batch_size=BATCH_SIZE,
         gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS,
         weight_decay=0.01,
-        warmup_steps=50,
-        logging_steps=10,
+        warmup_steps=10,
+        logging_steps=1,
+        save_steps=20,
+        save_total_limit=2,
+        report_to="wandb" if os.getenv("WANDB_API_KEY") else "none",
         bf16=is_bfloat16_supported(),
         fp16=not is_bfloat16_supported(),
         # GRPO specific parameters
         beta=0.1,  # KL penalty coefficient
+        num_generations=4, # Group size for GRPO
+        max_prompt_length=512,
+        max_completion_length=1024,
     )
 
     trainer = GRPOTrainer(
