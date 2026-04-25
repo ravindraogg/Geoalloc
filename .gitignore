@@ -1,0 +1,29 @@
+# Logs and temporary files
+*.log
+*.txt
+*.exitcode
+test_results.log
+test_out.txt
+test_output.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Docs (HF rejects large binaries)
+docs/*.pdf
+
+# Model outputs
+outputs/
+
+# OS files
+.DS_Store
+Thumbs.db
