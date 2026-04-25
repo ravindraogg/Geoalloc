@@ -1,3 +1,12 @@
+---
+title: SecureHeal Trainer
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # 🛡️ SecureHeal Arena
 
 > **A merged RL environment for cybersecurity vulnerability detection + autonomous system recovery.**
