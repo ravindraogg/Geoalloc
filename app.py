@@ -8,78 +8,124 @@ from secureheal_arena.server.secureheal_environment import SecureHealEnvironment
 # ────────────────────────────────────────────────────────────────────────
 
 custom_css = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 @import url('https://unpkg.com/@phosphor-icons/web/src/regular/style.css');
+
+:root {
+    --bg-color: #0b0f19;
+    --panel-bg: rgba(17, 24, 39, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
 
 body, .gradio-container {
     font-family: 'Inter', sans-serif !important;
-    background-color: #F8FAFC !important; /* Soft pastel slate background */
-    color: #334155 !important;
+    background-color: var(--bg-color) !important;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.15) 0px, transparent 50%);
+    color: var(--text-main) !important;
 }
 
-/* Flat, clean panels */
+/* Glassmorphism Panels */
 .glass-panel {
-    background-color: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 16px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+    background-color: var(--panel-bg) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
     padding: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Pastel metric text */
+.glass-panel:hover {
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.6) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Header Text */
+.header-title {
+    font-size: 3rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(to right, #60a5fa, #a78bfa) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin: 10px 0 0 0 !important;
+    text-shadow: 0 0 40px rgba(96, 165, 250, 0.3);
+}
+
+/* Metric text */
 .metric-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #475569;
-    margin: 0;
+    font-size: 3rem !important;
+    font-weight: 800 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    margin: 0 !important;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
-.metric-green { color: #16A34A; }
-.metric-red { color: #DC2626; }
-.metric-blue { color: #2563EB; }
+.metric-green { color: #34d399 !important; text-shadow: 0 0 20px rgba(52, 211, 153, 0.4); }
+.metric-red { color: #f87171 !important; text-shadow: 0 0 20px rgba(248, 113, 113, 0.4); }
+.metric-blue { color: #60a5fa !important; text-shadow: 0 0 20px rgba(96, 165, 250, 0.4); }
 
 /* Buttons */
-button.primary {
-    background-color: #BAE6FD !important; /* Pastel Blue */
-    color: #0369A1 !important;
-    border: 1px solid #7DD3FC !important;
+button {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-radius: 12px !important;
     font-weight: 600 !important;
-    border-radius: 8px !important;
-    box-shadow: none !important;
+    letter-spacing: 0.025em !important;
+    font-size: 0.9rem !important;
 }
+
+button.primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4) !important;
+}
+
 button.primary:hover {
-    background-color: #7DD3FC !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.6) !important;
 }
 
 button.secondary {
-    background-color: #F1F5F9 !important;
-    color: #475569 !important;
-    border: 1px solid #CBD5E1 !important;
-    font-weight: 500 !important;
-    border-radius: 8px !important;
-    box-shadow: none !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
+
 button.secondary:hover {
-    background-color: #E2E8F0 !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Code and Logs */
-.log-box textarea {
+.log-box textarea, .gradio-code textarea, .gradio-code .cm-editor {
     font-family: 'JetBrains Mono', monospace !important;
-    background-color: #F1F5F9 !important;
-    color: #334155 !important;
-    border: 1px solid #CBD5E1 !important;
-    border-radius: 8px !important;
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+}
+
+.log-box textarea:focus, .gradio-code .cm-focused {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
 }
 
 .icon-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1E293B;
-    margin-bottom: 16px;
+    gap: 12px;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #f8fafc !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
 }
 """
 
@@ -91,9 +137,9 @@ def create_demo():
         with gr.Column(elem_classes="glass-panel"):
             gr.HTML("""
             <div style="text-align: center; margin-bottom: 10px;">
-                <i class="ph ph-shield-check" style="font-size: 3rem; color: #3B82F6;"></i>
-                <h1 style="font-size: 2.5rem; margin-top: 10px; margin-bottom: 0; color: #0F172A;">SecureHeal Arena</h1>
-                <p style="font-size: 1.1rem; color: #64748B; margin-top: 5px;">Autonomous System Recovery & Vulnerability Patching Command Center</p>
+                <i class="ph ph-shield-check" style="font-size: 4rem; color: #60A5FA; text-shadow: 0 0 20px rgba(96,165,250,0.5);"></i>
+                <h1 class="header-title">SecureHeal Arena</h1>
+                <p style="font-size: 1.2rem; color: #94A3B8; margin-top: 5px; font-weight: 500;">Autonomous System Recovery & Vulnerability Patching Command Center</p>
             </div>
             """)
 
@@ -155,12 +201,12 @@ def create_demo():
             state = env.state
             
             stab_color = "metric-green" if state.system_stability > 0.8 else ("metric-red" if state.system_stability < 0.4 else "metric-value")
-            stab_html = f"<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>System Stability</p><h2 class='{stab_color}'>{state.system_stability:.0%}</h2></div>"
+            stab_html = f"<div style='text-align:center'><p style='color:#94A3B8;margin:0;font-weight:600;letter-spacing:0.05em;'>SYSTEM STABILITY</p><h2 class='{stab_color}'>{state.system_stability:.0%}</h2></div>"
             
-            lat_color = "metric-red" if state.latency_current > 150 else "metric-value"
-            lat_html = f"<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Current Latency</p><h2 class='{lat_color}'>{state.latency_current:.0f}ms</h2></div>"
+            lat_color = "metric-red" if state.latency_current > 150 else "metric-blue"
+            lat_html = f"<div style='text-align:center'><p style='color:#94A3B8;margin:0;font-weight:600;letter-spacing:0.05em;'>CURRENT LATENCY</p><h2 class='{lat_color}'>{state.latency_current:.0f}ms</h2></div>"
             
-            rew_html = f"<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Total Reward</p><h2 class='metric-blue'>{state.total_reward:.2f}</h2></div>"
+            rew_html = f"<div style='text-align:center'><p style='color:#94A3B8;margin:0;font-weight:600;letter-spacing:0.05em;'>TOTAL REWARD</p><h2 class='metric-blue'>{state.total_reward:.2f}</h2></div>"
             
             services_data = [[k, "Healthy" if v=="up" else ("Down" if v=="down" else "Degraded")] for k, v in state.services_status.items()]
             
@@ -217,10 +263,17 @@ def create_demo():
 
 if __name__ == "__main__":
     demo = create_demo()
+    # Use dark mode base with slate accents
     theme = gr.themes.Base(
-        primary_hue="cyan",
-        secondary_hue="blue",
+        primary_hue="blue",
+        secondary_hue="indigo",
         neutral_hue="slate",
         font=[gr.themes.GoogleFont("Inter"), "sans-serif"]
+    ).set(
+        body_background_fill="*neutral_950",
+        block_background_fill="*neutral_900",
+        block_border_width="1px",
+        block_border_color="*neutral_800",
+        input_background_fill="*neutral_800",
     )
     demo.launch(server_name="0.0.0.0", server_port=7860, share=False, css=custom_css, theme=theme)
