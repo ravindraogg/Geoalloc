@@ -4,116 +4,138 @@ import pandas as pd
 from secureheal_arena.server.secureheal_environment import SecureHealEnvironment
 
 # ────────────────────────────────────────────────────────────────────────
-# Modern Gradio Frontend for SecureHeal Arena
+# Modern Pastel SaaS Frontend for SecureHeal Arena
 # ────────────────────────────────────────────────────────────────────────
 
 custom_css = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://unpkg.com/@phosphor-icons/web/src/regular/style.css');
 
 body, .gradio-container {
     font-family: 'Inter', sans-serif !important;
-    background: radial-gradient(circle at top right, #1a202c, #0f172a, #000000);
-    color: #e2e8f0;
+    background-color: #F8FAFC !important; /* Soft pastel slate background */
+    color: #334155 !important;
 }
 
-/* Glassmorphism Panels */
+/* Flat, clean panels */
 .glass-panel {
-    background: rgba(30, 41, 59, 0.7) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
-    padding: 20px;
+    background-color: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+    padding: 24px;
 }
 
-/* Glowing text for numbers */
-.glow-text {
+/* Pastel metric text */
+.metric-value {
     font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(to right, #00f2fe, #4facfe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+    font-weight: 700;
+    color: #475569;
     margin: 0;
 }
 
-.glow-red { background: linear-gradient(to right, #ff0844, #ffb199); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.glow-green { background: linear-gradient(to right, #0ba360, #3cba92); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.metric-green { color: #16A34A; }
+.metric-red { color: #DC2626; }
+.metric-blue { color: #2563EB; }
 
 /* Buttons */
 button.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    border: none !important;
-    color: white !important;
+    background-color: #BAE6FD !important; /* Pastel Blue */
+    color: #0369A1 !important;
+    border: 1px solid #7DD3FC !important;
     font-weight: 600 !important;
-    transition: transform 0.2s, box-shadow 0.2s !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
 }
 button.primary:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 20px -10px rgba(118, 75, 162, 0.8) !important;
+    background-color: #7DD3FC !important;
+}
+
+button.secondary {
+    background-color: #F1F5F9 !important;
+    color: #475569 !important;
+    border: 1px solid #CBD5E1 !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+button.secondary:hover {
+    background-color: #E2E8F0 !important;
 }
 
 /* Code and Logs */
 .log-box textarea {
     font-family: 'JetBrains Mono', monospace !important;
-    background-color: #0d1117 !important;
-    color: #58a6ff !important;
-    border: 1px solid #30363d !important;
+    background-color: #F1F5F9 !important;
+    color: #334155 !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+}
+
+.icon-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 16px;
 }
 """
 
 def create_demo():
-    with gr.Blocks(title="SecureHeal Arena") as demo:
+    # Use the base theme as a clean slate
+    with gr.Blocks(title="SecureHeal Arena", css=custom_css, theme=gr.themes.Base()) as demo:
         env_state = gr.State()
 
         with gr.Column(elem_classes="glass-panel"):
             gr.HTML("""
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h1 style="font-size: 3rem; margin-bottom: 0; background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🛡️ SecureHeal Arena</h1>
-                <p style="font-size: 1.2rem; color: #94a3b8; margin-top: 5px;">Autonomous System Recovery & Vulnerability Patching Command Center</p>
+            <div style="text-align: center; margin-bottom: 10px;">
+                <i class="ph ph-shield-check" style="font-size: 3rem; color: #3B82F6;"></i>
+                <h1 style="font-size: 2.5rem; margin-top: 10px; margin-bottom: 0; color: #0F172A;">SecureHeal Arena</h1>
+                <p style="font-size: 1.1rem; color: #64748B; margin-top: 5px;">Autonomous System Recovery & Vulnerability Patching Command Center</p>
             </div>
             """)
 
         with gr.Row():
             # --- LEFT COLUMN: CONTROLS ---
             with gr.Column(scale=1, elem_classes="glass-panel"):
-                gr.Markdown("### 🎛️ Mission Control")
+                gr.HTML("<div class='icon-header'><i class='ph ph-sliders'></i> Mission Control</div>")
                 with gr.Row():
                     curriculum_level = gr.Radio(choices=[1, 2, 3], value=1, label="Curriculum Level", container=False)
-                    reset_btn = gr.Button("🚀 Initialize Scenario", variant="primary")
+                    reset_btn = gr.Button("Initialize Scenario", variant="primary")
                 
-                gr.Markdown("### 🤖 Agent Action Deck", elem_classes="mt-4")
-                with gr.Accordion("🔒 Security Operations", open=True):
+                gr.HTML("<div class='icon-header' style='margin-top: 24px;'><i class='ph ph-robot'></i> Agent Action Deck</div>")
+                with gr.Accordion("Security Operations", open=True):
                     with gr.Row():
-                        scan_btn = gr.Button("🔍 Scan Code")
-                        sim_btn = gr.Button("🧨 Simulate Attack")
+                        scan_btn = gr.Button("Scan Code")
+                        sim_btn = gr.Button("Simulate Attack")
                     patch_input = gr.Code(language="python", label="Patch Code")
                     with gr.Row():
-                        patch_btn = gr.Button("🛠️ Apply Patch", variant="primary")
-                        test_btn = gr.Button("🧪 Run Tests")
+                        patch_btn = gr.Button("Apply Patch", variant="primary")
+                        test_btn = gr.Button("Run Tests")
                 
-                with gr.Accordion("⚡ Infrastructure Operations", open=False):
+                with gr.Accordion("Infrastructure Operations", open=False):
                     service_input = gr.Dropdown(choices=["auth-service", "api-gateway", "db-layer", "payment-service"], label="Target Service", value="auth-service")
                     with gr.Row():
-                        restart_btn = gr.Button("🔄 Restart Service")
-                        realloc_btn = gr.Button("⚖️ Reallocate Resources")
-                    clean_btn = gr.Button("🧹 Clean Data Cache")
+                        restart_btn = gr.Button("Restart Service")
+                        realloc_btn = gr.Button("Reallocate Resources")
+                    clean_btn = gr.Button("Clean Data Cache")
                     classify_input = gr.Textbox(label="Anomaly Classification", placeholder="e.g., MEMORY_SPIKE")
-                    classify_btn = gr.Button("🏷️ Classify Issue")
+                    classify_btn = gr.Button("Classify Issue")
                     
             # --- RIGHT COLUMN: TELEMETRY & LOGS ---
             with gr.Column(scale=2):
                 with gr.Row(elem_classes="glass-panel"):
-                    # HTML Telemetry Cards
-                    stability_html = gr.HTML(value="<div style='text-align:center'><p style='color:#94a3b8;margin:0'>System Stability</p><h2 class='glow-text'>--</h2></div>")
-                    latency_html = gr.HTML(value="<div style='text-align:center'><p style='color:#94a3b8;margin:0'>Current Latency</p><h2 class='glow-text'>--</h2></div>")
-                    reward_html = gr.HTML(value="<div style='text-align:center'><p style='color:#94a3b8;margin:0'>Total Reward</p><h2 class='glow-text'>--</h2></div>")
+                    stability_html = gr.HTML(value="<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>System Stability</p><h2 class='metric-value'>--</h2></div>")
+                    latency_html = gr.HTML(value="<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Current Latency</p><h2 class='metric-value'>--</h2></div>")
+                    reward_html = gr.HTML(value="<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Total Reward</p><h2 class='metric-value'>--</h2></div>")
                 
                 with gr.Row(elem_classes="glass-panel"):
                     with gr.Column():
                         services_df = gr.Dataframe(headers=["Microservice", "Health Status"], label="Infrastructure Status", interactive=False)
                     with gr.Column():
-                        alerts_box = gr.Textbox(label="🚨 Active Threat Alerts", lines=4, interactive=False)
+                        alerts_box = gr.Textbox(label="Active Threat Alerts", lines=4, interactive=False)
                 
                 with gr.Column(elem_classes="glass-panel"):
                     code_display = gr.Code(language="python", interactive=False, label="Application Source Code")
@@ -132,23 +154,22 @@ def create_demo():
             
             state = env.state
             
-            # Formatted HTML gauges
-            stab_color = "glow-green" if state.system_stability > 0.8 else ("glow-red" if state.system_stability < 0.4 else "glow-text")
-            stab_html = f"<div style='text-align:center'><p style='color:#94a3b8;margin:0'>System Stability</p><h2 class='{stab_color}'>{state.system_stability:.0%}</h2></div>"
+            stab_color = "metric-green" if state.system_stability > 0.8 else ("metric-red" if state.system_stability < 0.4 else "metric-value")
+            stab_html = f"<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>System Stability</p><h2 class='{stab_color}'>{state.system_stability:.0%}</h2></div>"
             
-            lat_color = "glow-red" if state.latency_current > 150 else "glow-text"
-            lat_html = f"<div style='text-align:center'><p style='color:#94a3b8;margin:0'>Current Latency</p><h2 class='{lat_color}'>{state.latency_current:.0f}ms</h2></div>"
+            lat_color = "metric-red" if state.latency_current > 150 else "metric-value"
+            lat_html = f"<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Current Latency</p><h2 class='{lat_color}'>{state.latency_current:.0f}ms</h2></div>"
             
-            rew_html = f"<div style='text-align:center'><p style='color:#94a3b8;margin:0'>Total Reward</p><h2 class='glow-text'>{state.total_reward:.2f}</h2></div>"
+            rew_html = f"<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Total Reward</p><h2 class='metric-blue'>{state.total_reward:.2f}</h2></div>"
             
-            services_data = [[k, "🟢 Healthy" if v=="up" else ("🔴 Down" if v=="down" else "🟡 Degraded")] for k, v in state.services_status.items()]
+            services_data = [[k, "Healthy" if v=="up" else ("Down" if v=="down" else "Degraded")] for k, v in state.services_status.items()]
             
             alerts = []
             if state.vulnerability_present: alerts.append(f"[!] Vulnerability: {state.vulnerability_type}")
             if state.anomaly_type: alerts.append(f"[!] Anomaly: {state.anomaly_type}")
             for cf in state.cascading_failures: alerts.append(f"[!] Cascading: {cf}")
             if state.data_corrupted: alerts.append("[!] Data Corruption Detected")
-            alerts_text = "\n".join(alerts) if alerts else "✅ All Systems Nominal"
+            alerts_text = "\n".join(alerts) if alerts else "All Systems Nominal"
             
             logs = env._build_system_logs()
             logs_text = "\n".join(logs)
