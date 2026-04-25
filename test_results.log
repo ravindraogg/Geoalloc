@@ -1,0 +1,32 @@
+D:\Python\Lib\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.5.0) or chardet (7.4.3)/charset_normalizer (3.4.3) doesn't match a supported version!
+  warnings.warn(
+[PASS] sandbox_basic
+  [SKIP] Timeout test skipped on Windows (GIL limitation)
+         Works correctly on Linux/HF Spaces via SIGALRM
+[PASS] sandbox_timeout
+[PASS] sandbox_forbidden_ops
+  SQL injection vulnerable pass_rate = 0.0
+  SQL injection patched pass_rate = 1.0
+[PASS] sql_injection_tests
+  XSS patched pass_rate = 1.0
+[PASS] xss_tests
+  Path traversal patched pass_rate = 1.0
+[PASS] path_traversal_tests
+[PASS] curriculum_levels
+  Bad state reward: -0.175
+  Good state reward: 0.900
+[PASS] reward_computation
+  Reset done=False
+  scan_code: vuln_found=True
+  simulate_attack: exploit=True
+  apply_patch: applied=True
+  run_tests: pass_rate=1.0
+  classify_issue: correct=True
+  restart_service: Service 'auth-service' restarted (degraded → up).
+  reallocate: stability=0.8244891853803477
+  Final: patch=True test_rate=1.0 stability=0.82 reward=3.615
+[PASS] full_episode_loop
+
+==================================================
+RESULTS: 9 passed, 0 failed out of 9 tests
+==================================================

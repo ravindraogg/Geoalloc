@@ -14,6 +14,13 @@ pinned: false
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-Compatible-blue)](https://github.com/meta-pytorch/OpenEnv)
 [![Meta PyTorch](https://img.shields.io/badge/Meta%20PyTorch-Hackathon%202026-orange)](https://meta-pytorch.org/OpenEnv/)
 
+## Important Links 🔗
+- 🕹️ **Live Demo:** [Hugging Face Space](https://huggingface.co/spaces/ravindraogg/secureheal_arena)
+- 🎥 **Demo Video:** [YouTube Video](https://youtube.com/watch?v=PLACEHOLDER)
+- 📝 **Mini-Blog Post:** [Hugging Face Blog](https://huggingface.co/blog/PLACEHOLDER)
+- 📊 **Training Logs:** [Weights & Biases Run](https://wandb.ai/PLACEHOLDER)
+- 💻 **Pitch Deck:** [Presentation Slides](pitch_deck_content.md)
+
 ## Problem
 
 LLMs currently struggle with **multi-step cybersecurity tasks** — detecting vulnerabilities in running code, applying safe patches, and simultaneously stabilising degraded infrastructure. This environment trains an agent to handle the full lifecycle: **detect → exploit-verify → patch → test → stabilise**.
@@ -145,9 +152,22 @@ tests/
 pyproject.toml               # Package configuration
 ```
 
-## Training
+## Training & Results
 
-See `training/train.py` for the GRPO training pipeline using TRL + Unsloth.
+We used **TRL's GRPOTrainer** alongside **Unsloth** (QLoRA 4-bit) to train Qwen2.5-3B-Instruct on the SecureHeal Arena curriculum.
+
+### Baseline vs. Trained Behavior
+*   **Untrained Baseline:** Repeatedly outputs prose or invalid tool calls, causing system latency to skyrocket and cascading failures to overwhelm the service. Reward stays at `0.0`.
+*   **Trained Agent:** Immediately uses `scan_code` followed by `simulate_attack`. After applying a verified patch, it proactively uses `restart_service` to stabilize the degraded system.
+
+### Training Rewards
+*As required by the hackathon, here are our training reward curves showing convergence.*
+
+> **[TODO: Add Reward Plots here — commit `.png` files to the repo]**
+> `![Total Reward](path/to/reward_mean.png)`
+> `![Exploit Blocked (RLVR)](path/to/reward_r1.png)`
+
+See `training/train.py` for the GRPO training pipeline.
 
 ## Team
 
