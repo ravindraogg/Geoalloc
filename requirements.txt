@@ -1,0 +1,28 @@
+# Core dependencies for SecureHeal Arena
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# ML & Training
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1
+xformers==0.0.28.post3
+unsloth @ git+https://github.com/unslothai/unsloth.git
+trl>=0.14.0
+peft
+accelerate
+bitsandbytes
+transformers
+datasets
+
+# Environment & Server
+fastapi
+uvicorn
+python-multipart
+openenv-core
+
+# Utilities
+wandb
+psutil
+pydantic>=2.0
+requests
+httpx

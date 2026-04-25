@@ -1,6 +1,7 @@
 # Logs and temporary files
 *.log
 *.txt
+!requirements.txt
 *.exitcode
 test_results.log
 test_out.txt
