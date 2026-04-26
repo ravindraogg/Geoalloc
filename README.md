@@ -32,6 +32,16 @@ The agent operates inside a **simulated live infrastructure** where:
 - ⚡ System anomalies cause **cascading failures** (memory spikes, disk pressure, data corruption)
 - 🤖 The agent must **detect, patch, and recover** within a single long-horizon RL episode
 
+### 🎭 Multi-Agent Debate Architecture
+To ensure the highest accuracy of patches, our backend employs a 3-stage **Multi-Agent Debate Pipeline**:
+1. 🕵️ **Agent Alpha (Recon Scanner):** Analyzes code to detect vulnerabilities.
+2. 🥷 **Agent Beta (Red Team Attacker):** Takes Alpha's report and writes an exploit to prove the vulnerability is real.
+3. 🛡️ **Agent Gamma (Blue Team Defender):** Analyzes the exploit and writes a secure AST patch to neutralize the exact attack payload.
+
+### 💻 VS Code IDE Dashboard & Remote CLI
+- **Gradio Mission Control:** We built a high-fidelity VS Code-style IDE dashboard on Hugging Face to visualize the agent's multi-step decision process.
+- **SecureHeal CLI:** Developers can use `secureheal_cli.py` to scan local files or remote GitHub repos. The CLI routes code to the Hugging Face Space for analysis and automatically applies the agent's secure patches locally.
+
 ### Episode Flow
 
 ```

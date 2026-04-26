@@ -2,9 +2,9 @@
 
 ## Slide 1: Title Slide
 *   **Title:** SecureHeal Arena
-*   **Subtitle:** Autonomous System Recovery & Vulnerability Patching Command Center
+*   **Subtitle:** Autonomous System Recovery & Multi-Agent Vulnerability Patching
 *   **Logos:** Meta, PyTorch, Hugging Face (OpenEnv Hackathon 2026)
-*   **Visual:** The clean, pastel UI from our Gradio app.
+*   **Visual:** The high-fidelity VS Code IDE-style dashboard and mission control terminal.
 
 ## Slide 2: The Problem (Capability Gap)
 *   **Headline:** AI can write code, but can it save a dying system?
@@ -15,12 +15,15 @@
 *   **Visual:** A flowchart showing the chaotic reality of a live production incident.
 
 ## Slide 3: The Environment (SecureHeal Arena)
-*   **Headline:** A Dual-Layer OpenEnv Simulation
+*   **Headline:** A Dual-Layer OpenEnv Simulation & Multi-Agent Debate
 *   **Points:**
-    *   **Layer 1: Code Vulnerability:** Agent must use `scan_code` and `simulate_attack` inside a strict execution sandbox.
-    *   **Layer 2: System Stability:** Agent monitors latency and logs, using `restart_service` and `reallocate_resources`.
-    *   **Curriculum Learning:** Progresses from simple SQLi to complex, stochastic cascading anomalies.
-*   **Visual:** Screenshot of the Agent Action Deck and System Telemetry dashboard.
+    *   **Layer 1: System Stability:** Agent monitors latency and logs, using `restart_service` and `reallocate_resources`.
+    *   **Layer 2: Multi-Agent Patching Pipeline:**
+        *   🕵️ **Alpha (Scanner):** Detects vulnerability.
+        *   🥷 **Beta (Attacker):** Writes an exploit payload.
+        *   🛡️ **Gamma (Defender):** Writes AST patch to block the specific payload.
+    *   **Developer Tooling:** Comes with a headless **Remote CLI** (`secureheal_cli.py`) for real-world usage.
+*   **Visual:** Screenshot of the VS Code IDE dashboard and the Multi-Agent terminal debate.
 
 ## Slide 4: Reward Engineering & Pipeline
 *   **Headline:** Preventing Hacks with Verifiable Rewards

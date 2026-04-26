@@ -8,12 +8,11 @@
 *Action on screen:* Mouse clicking through the Gradio UI 'Mission Control' panel.
 **Narrator:** "The agent observes application code, system stability metrics, and live logs. It can scan code, simulate attacks in a secure sandbox, apply patches, and even reallocate server resources to handle cascading failures."
 
-## 0:40 - 1:10 | Baseline vs. Trained Agent (Visual: Terminal / UI split)
-**Narrator:** "Here is an untrained base model. It sees a memory spike, panics, and outputs invalid formatting or hallucinates tools. The system crashes."
-*Action on screen:* UI shows 'System Stability' dropping to 0%, red text "Cascading Failure".
-**Narrator:** "But after using TRL and Unsloth for GRPO training, our agent learned a multi-step recovery policy. Watch."
-*Action on screen:* Trained agent executes `scan_code` -> `simulate_attack` -> `apply_patch` -> `run_tests` -> `restart_service`. 
-**Narrator:** "It patches the SQL injection, runs the test suite, and restarts the degraded service. Stability is restored."
+## 0:40 - 1:10 | The Multi-Agent Pipeline (Visual: VS Code IDE Terminal)
+**Narrator:** "To solve this, we implemented a 3-stage Multi-Agent Debate architecture. Watch the live terminal."
+*Action on screen:* UI shows Agent Alpha diagnosing the code. Agent Beta generating an exploit. Agent Gamma writing the AST patch.
+**Narrator:** "Agent Alpha scans for vulnerabilities. Agent Beta acts as the Red Team, proving the exploit works. Finally, Agent Gamma acts as the Blue Team, writing a verified patch that neutralizes Beta's exact attack."
+*Action on screen:* The code is patched, tests pass, and the system stability metric jumps back to 100%.
 
 ## 1:10 - 1:40 | The Reward Design (Visual: 4 Reward Curves Plot)
 **Narrator:** "We achieved this using four independent reward functions: Exploit blocked (RLVR verifiable), Test suite pass rate, System stability delta, and Cascading failure resolution.

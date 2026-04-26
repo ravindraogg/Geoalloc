@@ -41,8 +41,8 @@ A merged RL environment combining **SecureCode Arena X** (cybersecurity vulnerab
 
 ### Hackathon Theme Coverage
 - **Theme 2**: Long-horizon planning (multi-step patch + recovery episodes)
-- **Theme 3.1**: World modeling / professional tasks (real infra tooling simulation)
-- **Theme 1**: Multi-agent potential (attacker vs. defender extension)
+- **Theme 3.1**: World modeling / professional tasks (real infra tooling + CLI simulation)
+- **Theme 1**: Multi-agent potential (3-Stage Recon/Attacker/Defender debate pipeline)
 
 ---
 
@@ -429,11 +429,11 @@ def rollout_fn(prompt_batch):
 - Pitch deck ready (problem → env → results → why it matters)
 
 **Demo format (judge-facing):**
-1. Show baseline model failing (vulnerable code not patched)
-2. Show reward verifier output
-3. Show trained model succeeding (code patched, system stable)
-4. Show reward curve (before → after)
-5. One sentence: "Here's how we prevented reward hacking"
+1. Show the **VS Code IDE-style Gradio Dashboard**.
+2. Show the **Multi-Agent Debate Pipeline** (Agent Alpha scanning, Agent Beta attacking, Agent Gamma patching).
+3. Demonstrate the headless **SecureHeal CLI** (`secureheal_cli.py`) applying patches locally via the HF Space API.
+4. Show reward curve (before → after) from WandB.
+5. One sentence: "Here's how we prevented reward hacking with execution sandboxes."
 
 ---
 
