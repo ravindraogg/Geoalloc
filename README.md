@@ -42,6 +42,14 @@ To ensure the highest accuracy of patches, our backend employs a 3-stage **Multi
 - **Gradio Mission Control:** We built a high-fidelity VS Code-style IDE dashboard on Hugging Face to visualize the agent's multi-step decision process.
 - **SecureHeal CLI:** Developers can use `secureheal_cli.py` to scan local files or remote GitHub repos. The CLI routes code to the Hugging Face Space for analysis and automatically applies the agent's secure patches locally.
 
+### 📊 Training Evidence
+For the hackathon judges, we have compiled a detailed **Training Evidence** document containing:
+- **WandB Rewards & KL Curves**
+- **Heuristic Reward Function Rubrics**
+- **Before/After Performance Benchmarks**
+
+👉 **[View Training Evidence & Logs](TRAINING_EVIDENCE.md)**
+
 ### Episode Flow
 
 ```
