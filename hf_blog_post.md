@@ -25,9 +25,9 @@ Built on top of OpenEnv, SecureHeal Arena places the agent in a command center w
 *   **Actions:** A suite of tools ranging from `simulate_attack` and `apply_patch` (running inside a secure, isolated sandbox) to `restart_service` and `reallocate_resources`.
 
 To ensure highly reliable code patches, our backend employs a **Multi-Agent Debate Pipeline**:
-1. 🕵️ **Agent Alpha (Recon Scanner):** Diagnoses vulnerabilities.
-2. 🥷 **Agent Beta (Red Team Attacker):** Writes an exploit proving the vulnerability exists.
-3. 🛡️ **Agent Gamma (Blue Team Defender):** Writes the secure AST patch to counter the attack.
+1. **Agent Alpha (Recon Scanner):** Diagnoses vulnerabilities.
+2. **Agent Beta (Red Team Attacker):** Writes an exploit proving the vulnerability exists.
+3. **Agent Gamma (Blue Team Defender):** Writes the secure AST patch to counter the attack.
 
 We visualize this entire process using a **VS Code-style IDE Gradio dashboard**, giving judges and users a "Mission Control" view of the debate and live system telemetry. We also built a headless **Remote CLI** (`secureheal_cli.py`) that developers can use to scan and patch local files securely via the Hugging Face Space backend.
 

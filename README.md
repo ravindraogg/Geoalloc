@@ -9,27 +9,27 @@ pinned: true
 license: mit
 ---
 
-# 🛡️ SecureHeal Arena
+# SecureHeal Arena
 
 > **A merged RL environment for cybersecurity vulnerability detection + autonomous system recovery.**
 
 ---
 
-### 🕹️ [Live Environment (Hugging Face Space)](https://huggingface.co/spaces/ravindraog/secureheal-trainer)
-### 📊 [Weights & Biases Training Run](https://wandb.ai/ravindraog/secureheal-arena/runs/grpo-v2)
+### [Live Environment (Hugging Face Space)](https://huggingface.co/spaces/ravindraog/secureheal-trainer)
+### [Official Training Logs (Hugging Face Jobs)](https://huggingface.co/jobs/Nitesh-Reddy/69ecf914d70108f37acdeb13)
 
 ---
 
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-Compatible-blue)](https://github.com/meta-pytorch/OpenEnv)
 [![Meta PyTorch](https://img.shields.io/badge/Meta%20PyTorch-Hackathon%202026-orange)](https://meta-pytorch.org/OpenEnv/)
 
-## Important Links 🔗
-- 🎥 **Demo Video:** [YouTube Video](https://youtube.com/watch?v=S0T0E9S1ECU)
-- 📊 **Training Logs:** [Weights & Biases Run](https://wandb.ai/ravindraog/secureheal-arena/runs/grpo-v2)
-- 📑 **Training Evidence:** [Detailed Logs & Plots](TRAINING_EVIDENCE.md)
-- 💻 **Pitch Deck:** [Presentation Slides](pitch_deck_content.md)
-- 📝 **Mini-Blog Post:** [Hugging Face Blog](hf_blog_post.md)
-- 📓 **Training Notebook:** [Interactive Colab Notebook](training/SecureHeal_Arena_Training.ipynb)
+## Important Links
+- **Demo Video:** [YouTube Video](https://youtube.com/watch?v=S0T0E9S1ECU)
+- **Training Logs:** [Hugging Face Jobs Training Run](https://huggingface.co/jobs/Nitesh-Reddy/69ecf914d70108f37acdeb13)
+- **Training Evidence:** [Detailed Logs & Plots](TRAINING_EVIDENCE.md)
+- **Pitch Deck:** [Presentation Slides](pitch_deck_content.md)
+- **Mini-Blog Post:** [Hugging Face Blog](hf_blog_post.md)
+- **Training Notebook:** [Interactive Colab Notebook](training/SecureHeal_Arena_Training.ipynb)
 
 ## Problem
 
@@ -37,28 +37,28 @@ LLMs currently struggle with **multi-step cybersecurity tasks** — detecting vu
 
 ## How It Works
 
-The agent operates inside a **simulated live infrastructure** where:
-- 🔴 Code is running with **active vulnerabilities** (SQL injection, XSS, path traversal)
-- ⚡ System anomalies cause **cascading failures** (memory spikes, disk pressure, data corruption)
-- 🤖 The agent must **detect, patch, and recover** within a single long-horizon RL episode
+The agent operates inside a simulated live infrastructure where:
+- Code is running with **active vulnerabilities** (SQL injection, XSS, path traversal)
+- System anomalies cause **cascading failures** (memory spikes, disk pressure, data corruption)
+- The agent must **detect, patch, and recover** within a single long-horizon RL episode
 
-### 🎭 Multi-Agent Debate Architecture
+### Multi-Agent Debate Architecture
 To ensure the highest accuracy of patches, our backend employs a 3-stage **Multi-Agent Debate Pipeline**:
-1. 🕵️ **Agent Alpha (Recon Scanner):** Analyzes code to detect vulnerabilities.
-2. 🥷 **Agent Beta (Red Team Attacker):** Takes Alpha's report and writes an exploit to prove the vulnerability is real.
-3. 🛡️ **Agent Gamma (Blue Team Defender):** Analyzes the exploit and writes a secure AST patch to neutralize the exact attack payload.
+1. **Agent Alpha (Recon Scanner):** Analyzes code to detect vulnerabilities.
+2. **Agent Beta (Red Team Attacker):** Takes Alpha's report and writes an exploit to prove the vulnerability is real.
+3. **Agent Alpha (Blue Team Defender):** Analyzes the exploit and writes a secure AST patch to neutralize the exact attack payload.
 
-### 💻 VS Code IDE Dashboard & Remote CLI
+### VS Code IDE Dashboard & Remote CLI
 - **Gradio Mission Control:** We built a high-fidelity VS Code-style IDE dashboard on Hugging Face to visualize the agent's multi-step decision process.
 - **SecureHeal CLI:** Developers can use `secureheal_cli.py` to scan local files or remote GitHub repos. The CLI routes code to the Hugging Face Space for analysis and automatically applies the agent's secure patches locally.
 
-### 📊 Training Evidence
+### Training Evidence
 For the hackathon judges, we have compiled a detailed **Training Evidence** document containing:
 - **WandB Rewards & KL Curves**
 - **Heuristic Reward Function Rubrics**
 - **Before/After Performance Benchmarks**
 
-👉 **[View Training Evidence & Logs](TRAINING_EVIDENCE.md)**
+**[View Training Evidence & Logs](TRAINING_EVIDENCE.md)**
 
 ### Episode Flow
 
@@ -89,7 +89,7 @@ Episode ends when: system stable + tests passing OR max_steps reached
 | `reallocate_resources` | DataHeal | Shift compute resources |
 | `classify_issue` | DataHeal | Tag anomaly type |
 
-### ⚖️ Multi-Tier Reward Architecture
+### Multi-Tier Reward Architecture
 To ensure the highest accuracy of patches, we use a hybrid reward strategy:
 
 - **Tier 1: GRPO Heuristic Rewards** (Optimization phase): Enforces correct tool usage (40%), formatting (30%), reasoning (20%), and quality (10%).
@@ -187,6 +187,9 @@ pyproject.toml               # Package configuration
 ## Training & Results
 
 We used **TRL's GRPOTrainer** alongside **Unsloth** (QLoRA 4-bit) to train Qwen2.5-3B-Instruct on the SecureHeal Arena curriculum.
+
+- **Trained Model:** [Nitesh-Reddy/secureheal-agent-v2](https://huggingface.co/Nitesh-Reddy/secureheal-agent-v2)
+- **Peak Performance:** Best Reward of **4.141** (Step 170)
 
 ### Baseline vs. Trained Behavior
 *   **Untrained Baseline:** Repeatedly outputs prose or invalid tool calls, causing system latency to skyrocket and cascading failures to overwhelm the service. Reward stays at `0.0`.
