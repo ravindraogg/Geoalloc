@@ -32,8 +32,8 @@ def scan_file(filepath):
     try:
         with open(filepath, 'rb') as f:
             files = {'file': (os.path.basename(filepath), f, 'text/plain')}
-            data = {'context': 'generic code', 'max_tokens': 1024}
-            response = requests.post(url, files=files, data=data, timeout=120)
+            data = {'context': 'generic code', 'max_tokens': 512}
+            response = requests.post(url, files=files, data=data, timeout=300)
             
         if response.status_code == 200:
             result = response.json()
