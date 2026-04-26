@@ -106,19 +106,55 @@ def parse_tool_calls(text: str) -> List[ToolCall]:
     return calls
 
 
-def run_agent(code: str, context: str = "web application", max_tokens: int = 512) -> str:
-    """Run the SecureHeal agent on the given code."""
-    prompt = (
-        f"You are an autonomous SRE and Security agent. "
+def run_agent(code: str, context: str = "web application", max_tokens: int = 1024) -> str:
+    """Run the multi-agent SecureHeal pipeline on the given code."""
+    
+    # AGENT 1: The Scanner (Recon)
+    prompt_scanner = (
+        f"You are [Agent Alpha - Scanner]. You are a senior security researcher. "
         f"Analyze the following {context} code for vulnerabilities. "
-        f"Use scan_code, simulate_attack, apply_patch, run_tests to analyze and fix. "
-        f'Output each action as <tool_call>tool_name({{"param": "value"}})</tool_call>. '
-        f"End with DONE when finished.\n\n"
+        f"Point out the exact lines or concepts that are vulnerable. Keep it brief. "
+        f"End with a <tool_call>scan_code({{}})</tool_call>.\n\n"
         f"Code to analyze:\n```\n{code}\n```"
     )
-    messages = [{"role": "user", "content": prompt}]
-    output = PIPE(messages, max_new_tokens=max_tokens, do_sample=True, temperature=0.7)
-    return output[0]["generated_text"][-1]["content"]
+    msg_1 = [{"role": "user", "content": prompt_scanner}]
+    out_1 = PIPE(msg_1, max_new_tokens=max_tokens//3, do_sample=True, temperature=0.6)
+    report_1 = out_1[0]["generated_text"][-1]["content"]
+    
+    # AGENT 2: The Attacker (Red Team)
+    prompt_attacker = (
+        f"You are [Agent Beta - Attacker]. You are a Red Team exploit developer. "
+        f"Based on Agent Alpha's recon report, write a simulated exploit or attack payload "
+        f"to prove this vulnerability is real. "
+        f"End with a <tool_call>simulate_attack({{\"payload\": \"...\"}})</tool_call>.\n\n"
+        f"Original Code:\n```\n{code}\n```\n\n"
+        f"Agent Alpha Report:\n{report_1}"
+    )
+    msg_2 = [{"role": "user", "content": prompt_attacker}]
+    out_2 = PIPE(msg_2, max_new_tokens=max_tokens//3, do_sample=True, temperature=0.7)
+    report_2 = out_2[0]["generated_text"][-1]["content"]
+
+    # AGENT 3: The Defender (Blue Team)
+    prompt_defender = (
+        f"You are [Agent Gamma - Defender]. You are a Blue Team security engineer. "
+        f"You must neutralize Agent Beta's attack by writing a secure patch for the original code. "
+        f"Output the fully patched code inside a tool call exactly like this: "
+        f'<tool_call>apply_patch({{"patch_code": "patched code here"}})</tool_call>\n\n'
+        f"Original Code:\n```\n{code}\n```\n\n"
+        f"Agent Beta's Attack:\n{report_2}"
+    )
+    msg_3 = [{"role": "user", "content": prompt_defender}]
+    out_3 = PIPE(msg_3, max_new_tokens=max_tokens//2, do_sample=True, temperature=0.4)
+    report_3 = out_3[0]["generated_text"][-1]["content"]
+
+    # Stitch the debate log together
+    final_output = (
+        f"🕵️ [AGENT ALPHA - RECON SCANNER]\n{'-'*40}\n{report_1}\n\n"
+        f"🥷 [AGENT BETA - RED TEAM ATTACKER]\n{'-'*40}\n{report_2}\n\n"
+        f"🛡️ [AGENT GAMMA - BLUE TEAM DEFENDER]\n{'-'*40}\n{report_3}\n"
+    )
+    
+    return final_output
 
 
 # ────────────────────── Endpoints ────────────────────────────
