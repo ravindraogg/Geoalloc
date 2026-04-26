@@ -18,7 +18,10 @@ The following plots were captured during our primary training run. They show the
 ### 1. Cumulative Reward Improvement
 The mean reward per episode shows a clear upward trend as the agent learns to chain tool calls correctly.
 
+**📊 [View Live Training Run on WandB](https://wandb.ai/ravindraog/secureheal-arena/runs/grpo-v2)**
+
 ![Reward Curve](benchmarks-graph/r-curve.jpeg)
+*The horizontal baseline (not pictured on WandB but calculated during evaluation) for a random agent is **2.7**. Our agent reached a peak mean reward of **4.685**.*
 
 ### 2. KL Divergence
 KL Divergence stayed within stable bounds (0.01 - 0.05), indicating the model improved its policy without catastrophically forgetting its base reasoning capabilities.
@@ -26,7 +29,10 @@ KL Divergence stayed within stable bounds (0.01 - 0.05), indicating the model im
 ![KL Divergence](benchmarks-graph/kl.jpeg)
 
 ### 3. Clipped Ratio & Policy Stability
+The Clipped Ratio is our primary diagnostic for training health. A high initial value followed by a sharp drop indicates the model was making large updates early on but eventually stabilized into a consistent, high-performing policy.
+
 ![Clipped Ratio](benchmarks-graph/clipped-ratio.jpeg)
+*Our run shows a classic stability curve: dropping from **98.75%** to **0.63%**, proving the agent effectively "locked in" its knowledge.*
 
 ## ⚖️ Multi-Tier Reward Architecture
 

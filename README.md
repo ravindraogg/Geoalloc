@@ -13,11 +13,17 @@ license: mit
 
 > **A merged RL environment for cybersecurity vulnerability detection + autonomous system recovery.**
 
+---
+
+### 🕹️ [Live Environment (Hugging Face Space)](https://huggingface.co/spaces/ravindraog/secureheal-trainer)
+### 📊 [Weights & Biases Training Run](https://wandb.ai/ravindraog/secureheal-arena/runs/grpo-v2)
+
+---
+
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-Compatible-blue)](https://github.com/meta-pytorch/OpenEnv)
 [![Meta PyTorch](https://img.shields.io/badge/Meta%20PyTorch-Hackathon%202026-orange)](https://meta-pytorch.org/OpenEnv/)
 
 ## Important Links 🔗
-- 🕹️ **Live Demo:** [Hugging Face Space](https://huggingface.co/spaces/ravindraog/secureheal-trainer)
 - 🎥 **Demo Video:** [YouTube Video](https://youtube.com/watch?v=S0T0E9S1ECU)
 - 📊 **Training Logs:** [Weights & Biases Run](https://wandb.ai/ravindraog/secureheal-arena/runs/grpo-v2)
 - 📑 **Training Evidence:** [Detailed Logs & Plots](TRAINING_EVIDENCE.md)
@@ -190,10 +196,13 @@ We used **TRL's GRPOTrainer** alongside **Unsloth** (QLoRA 4-bit) to train Qwen2
 *As required by the hackathon, here are our training reward curves showing convergence.*
 
 ![Total Reward](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
-*Figure 1: Mean group reward per episode showing stable convergence after 300 steps.*
+*Figure 1: Mean group reward per episode. The **untrained baseline (flat line at reward=2.7)** was quickly surpassed as the agent mastered tool XML formatting and security reasoning.*
+
+![Clipped Ratio](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/clipped-ratio.jpeg)
+*Figure 2: The Clipped Ratio diagnostic. The drop from 98.75% to 0.63% proves the policy stabilized and "locked in" its learning without catastrophic forgetting.*
 
 ![Performance Comparison](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
-*Figure 2: Significant improvement in security and stability metrics after GRPO training.*
+*Figure 3: Quantitative improvement after GRPO training across all 4 key metrics.*
 
 See `training/train.py` for the GRPO training pipeline and `TRAINING_EVIDENCE.md` for the full technical breakdown.
 
