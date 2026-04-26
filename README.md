@@ -8,7 +8,7 @@ app_port: 7860
 pinned: true
 license: mit
 ---
-
+[![SecureHeal Arena Demo](https://img.youtube.com/vi/jin3_5QZHKk/maxresdefault.jpg)](https://youtu.be/jin3_5QZHKk)
 # SecureHeal Arena
 
 > **A merged RL environment for cybersecurity vulnerability detection and autonomous system recovery.**

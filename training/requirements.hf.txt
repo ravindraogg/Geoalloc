@@ -1,0 +1,24 @@
+# Specialized requirements for Unsloth + GRPO on HF Spaces
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1
+xformers==0.0.28.post3
+
+# Install Unsloth from source for the latest GRPO support
+unsloth @ git+https://github.com/unslothai/unsloth.git
+
+# Core training libraries
+trl>=0.14.0
+peft
+accelerate
+bitsandbytes
+transformers
+datasets
+
+# Infrastructure
+fastapi
+uvicorn
+wandb
+openenv-core

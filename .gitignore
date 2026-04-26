@@ -1,8 +1,10 @@
 # Logs and temporary files
 *.log
 !test_results.log
-*.txt
+# *.txt
 !requirements.txt
+!ModelTrainedLogs.txt
+!RawModelTrainedLoga.txt
 *.exitcode
 # test_results.log - REMOVED FROM IGNORE
 test_out.txt

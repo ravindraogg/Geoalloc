@@ -21,9 +21,9 @@ HF_SPACE_URL = "https://ravindraog-secureheal-trainer.hf.space"
 
 def print_banner():
     print("="*65)
-    print(" 🛡️   SecureHeal Autonomous Agent CLI  🛡️")
+    print("   SecureHeal Autonomous Agent CLI")
     print("="*65)
-    print(f"📡 Connected to Space: {HF_SPACE_URL}")
+    print(f"[*] Connected to Space: {HF_SPACE_URL}")
     print("="*65 + "\n")
 
 def scan_file(filepath):
@@ -38,7 +38,7 @@ def scan_file(filepath):
         if response.status_code == 200:
             result = response.json()
             if result.get('vulnerabilities_found'):
-                print(f"  [⚠️] Vulnerability Detected in {filepath}!")
+                print(f"  [!!] Vulnerability Detected in {filepath}!")
                 analysis = result.get('analysis', '')
                 
                 # Show full agent reasoning (excluding raw tool calls)
@@ -49,9 +49,9 @@ def scan_file(filepath):
                 # Extract and apply patch
                 apply_patch(filepath, analysis)
             else:
-                print(f"  [✓] All checks passed. No vulnerabilities found in {filepath}.")
+                print(f"  [OK] All checks passed. No vulnerabilities found in {filepath}.")
         elif response.status_code == 503:
-            print("  [⏳] Model is loading on Hugging Face. Please try again in 1-2 minutes.")
+            print("  [WAIT] Model is loading on Hugging Face. Please try again in 1-2 minutes.")
         else:
             print(f"  [!] Error: {response.status_code} - {response.text}")
     except Exception as e:
@@ -61,7 +61,7 @@ def apply_patch(filepath, analysis):
     """Parses tool calls from the agent output and applies patches locally."""
     match = re.search(r'<tool_call>\s*apply_patch\s*\((.*?)\)\s*</tool_call>', analysis, re.DOTALL)
     if match:
-        print("  [🛠️] Autonomous Agent generated a patch. Applying...")
+        print("  [PATCH] Autonomous Agent generated a patch. Applying...")
         try:
             patch_data = json.loads(match.group(1))
             patch_code = patch_data.get("patch_code") or patch_data.get("code") or patch_data.get("patch")
@@ -75,7 +75,7 @@ def apply_patch(filepath, analysis):
                 # Write the patched file
                 with open(filepath, 'w') as f:
                     f.write(patch_code)
-                print(f"  [✅] Patch applied to {filepath} successfully! (Backup saved to .bak)")
+                print(f"  [DONE] Patch applied to {filepath} successfully! (Backup saved to .bak)")
             else:
                 print("  [!] Patch tool called, but no code was provided in the arguments.")
         except Exception as e:
