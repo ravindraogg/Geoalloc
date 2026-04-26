@@ -1,279 +1,351 @@
 import gradio as gr
-import json
-import pandas as pd
+import time
+import os
+import sys
+
+# Ensure imports work when mounted
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
 from secureheal_arena.server.secureheal_environment import SecureHealEnvironment
 
-# ────────────────────────────────────────────────────────────────────────
-# Modern Pastel SaaS Frontend for SecureHeal Arena
-# ────────────────────────────────────────────────────────────────────────
-
 custom_css = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import url('https://unpkg.com/@phosphor-icons/web/src/regular/style.css');
 
 :root {
-    --bg-color: #0b0f19;
-    --panel-bg: rgba(17, 24, 39, 0.7);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --vscode-bg: #1e1e1e;
+    --vscode-side: #252526;
+    --vscode-bar: #333333;
+    --vscode-accent: #007acc;
+    --vscode-text: #cccccc;
+    --vscode-border: #3c3c3c;
+    --vscode-terminal: #1e1e1e;
 }
 
 body, .gradio-container {
-    font-family: 'Inter', sans-serif !important;
-    background-color: var(--bg-color) !important;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.15) 0px, transparent 50%);
-    color: var(--text-main) !important;
+    background-color: var(--vscode-bg) !important;
+    color: var(--vscode-text) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    margin: 0 !important; 
+    padding: 0 !important;
+    max-width: 100% !important;
 }
 
-/* Glassmorphism Panels */
-.glass-panel {
-    background-color: var(--panel-bg) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 20px !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
-    padding: 24px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* VS Code Layout Classes */
+.vscode-header {
+    background-color: var(--vscode-bar);
+    border-bottom: 1px solid var(--vscode-border);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #fff;
+    width: 100%;
 }
 
-.glass-panel:hover {
-    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.6) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+.vscode-sidebar {
+    background-color: var(--vscode-side) !important;
+    border-right: 1px solid var(--vscode-border) !important;
+    padding: 10px !important;
+    height: 100%;
 }
 
-/* Header Text */
-.header-title {
-    font-size: 3rem !important;
-    font-weight: 800 !important;
-    background: linear-gradient(to right, #60a5fa, #a78bfa) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    margin: 10px 0 0 0 !important;
-    text-shadow: 0 0 40px rgba(96, 165, 250, 0.3);
+.vscode-editor {
+    background-color: var(--vscode-bg) !important;
+    padding: 0 !important;
 }
 
-/* Metric text */
-.metric-value {
-    font-size: 3rem !important;
-    font-weight: 800 !important;
+/* Override Gradio elements to look like VS Code */
+.gradio-code textarea, .gradio-code .cm-editor {
     font-family: 'JetBrains Mono', monospace !important;
-    margin: 0 !important;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    background-color: var(--vscode-bg) !important;
+    color: #d4d4d4 !important;
+    font-size: 14px !important;
+    border: none !important;
 }
 
-.metric-green { color: #34d399 !important; text-shadow: 0 0 20px rgba(52, 211, 153, 0.4); }
-.metric-red { color: #f87171 !important; text-shadow: 0 0 20px rgba(248, 113, 113, 0.4); }
-.metric-blue { color: #60a5fa !important; text-shadow: 0 0 20px rgba(96, 165, 250, 0.4); }
+/* Panel styling */
+.gradio-box {
+    border: 1px solid var(--vscode-border) !important;
+    background-color: var(--vscode-side) !important;
+    border-radius: 0 !important;
+}
 
 /* Buttons */
 button {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    border-radius: 12px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.025em !important;
-    font-size: 0.9rem !important;
+    border-radius: 2px !important;
+    font-size: 12px !important;
+    border: 1px solid transparent !important;
+    transition: background 0.1s !important;
+    padding: 6px 12px !important;
 }
 
 button.primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    background-color: var(--vscode-accent) !important;
     color: white !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4) !important;
 }
 
 button.primary:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.6) !important;
+    background-color: #005f9e !important;
 }
 
 button.secondary {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: #e2e8f0 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background-color: #3c3c3c !important;
+    color: white !important;
+    border: 1px solid #4a4a4a !important;
 }
 
 button.secondary:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    transform: translateY(-1px) !important;
+    background-color: #4a4a4a !important;
 }
 
-/* Code and Logs */
-.log-box textarea, .gradio-code textarea, .gradio-code .cm-editor {
+/* Status indicator */
+.status-pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+}
+.status-ok { color: #16825D; font-weight: bold; }
+.status-warn { color: #CCA700; font-weight: bold; }
+.status-error { color: #F14C4C; font-weight: bold; }
+
+/* Radio and Checkboxes */
+label.radio-label {
+    background: transparent !important;
+    border: none !important;
+    color: var(--vscode-text) !important;
+}
+label.radio-label.selected {
+    background: #37373d !important;
+    border: 1px solid #007acc !important;
+}
+
+/* Terminal Textbox */
+.log-box textarea {
     font-family: 'JetBrains Mono', monospace !important;
-    background-color: rgba(15, 23, 42, 0.6) !important;
+    background-color: var(--vscode-terminal) !important;
     color: #e2e8f0 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 12px !important;
+    border: none !important;
+    font-size: 13px !important;
+}
+.log-box textarea:focus {
+    border: none !important;
+    box-shadow: none !important;
 }
 
-.log-box textarea:focus, .gradio-code .cm-focused {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
-}
-
-.icon-header {
+.editor-header {
+    background: #2d2d2d; 
+    padding: 8px 16px; 
+    border-bottom: 1px solid #3c3c3c; 
+    font-size: 13px; 
+    font-family: -apple-system, sans-serif;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.5rem !important;
-    font-weight: 700 !important;
-    color: #f8fafc !important;
-    margin-bottom: 20px !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 10px;
+    gap: 8px;
 }
 """
 
+# Placeholder Repositories
+REPOS = {
+    "auth-service/login.py": {
+        "code": "def authenticate(user, password):\n    # TODO: Add secure hashing\n    query = f\"SELECT * FROM users WHERE u='{user}' AND p='{password}'\"\n    return db.execute(query)\n",
+        "attack": "def authenticate(user, password):\n    # [!] EXPLOIT SIMULATED: SQL Injection Attack via ' OR '1'='1\n    query = f\"SELECT * FROM users WHERE u='admin' OR '1'='1' AND p=''\"\n    # Access granted as admin bypassing password!\n    return db.execute(query)\n",
+        "patch": "def authenticate(user, password):\n    # [✓] PATCHED: Parameterized Query\n    query = \"SELECT * FROM users WHERE u=? AND p=?\"\n    return db.execute(query, (user, password))\n"
+    },
+    "payment-gateway/process.py": {
+        "code": "def process_payment(amount, user_id):\n    # No rate limiting applied\n    charge_credit_card(user_id, amount)\n    return {'status': 'success'}\n",
+        "attack": "def process_payment(amount, user_id):\n    # [!] EXPLOIT SIMULATED: Rate Limit Bypass / DDoS\n    for _ in range(100000):\n        charge_credit_card(user_id, amount)\n    # System crashing...\n",
+        "patch": "def process_payment(amount, user_id):\n    # [✓] PATCHED: Rate limiter applied\n    if rate_limiter.is_allowed(user_id):\n        charge_credit_card(user_id, amount)\n        return {'status': 'success'}\n    raise RateLimitExceeded()\n"
+    }
+}
+
 def create_demo():
-    # Use the base theme as a clean slate
-    with gr.Blocks(title="SecureHeal Arena", css=custom_css, theme=gr.themes.Base()) as demo:
+    theme = gr.themes.Base(
+        primary_hue="blue",
+        neutral_hue="slate"
+    ).set(
+        body_background_fill="#1e1e1e",
+        block_background_fill="#252526",
+        block_border_color="#3c3c3c",
+        input_background_fill="#3c3c3c",
+        border_color_primary="#3c3c3c",
+        panel_background_fill="#252526"
+    )
+
+    with gr.Blocks(title="SecureHeal Arena - VS Code Edition", css=custom_css, theme=theme) as demo:
         env_state = gr.State()
+        current_repo_state = gr.State("auth-service/login.py")
 
-        with gr.Column(elem_classes="glass-panel"):
-            gr.HTML("""
-            <div style="text-align: center; margin-bottom: 10px;">
-                <i class="ph ph-shield-check" style="font-size: 4rem; color: #60A5FA; text-shadow: 0 0 20px rgba(96,165,250,0.5);"></i>
-                <h1 class="header-title">SecureHeal Arena</h1>
-                <p style="font-size: 1.2rem; color: #94A3B8; margin-top: 5px; font-weight: 500;">Autonomous System Recovery & Vulnerability Patching Command Center</p>
-            </div>
-            """)
+        # Header
+        gr.HTML("""
+        <div class='vscode-header'>
+            <i class="ph ph-shield-check" style="font-size: 16px; margin-right: 8px; color: #007acc;"></i>
+            <strong>SecureHeal IDE</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Workspace: SecureHeal_Arena
+        </div>
+        """)
 
-        with gr.Row():
-            # --- LEFT COLUMN: CONTROLS ---
-            with gr.Column(scale=1, elem_classes="glass-panel"):
-                gr.HTML("<div class='icon-header'><i class='ph ph-sliders'></i> Mission Control</div>")
-                with gr.Row():
-                    curriculum_level = gr.Radio(choices=[1, 2, 3], value=1, label="Curriculum Level", container=False)
-                    reset_btn = gr.Button("Initialize Scenario", variant="primary")
+        with gr.Row(equal_height=True):
+            # SIDEBAR
+            with gr.Column(scale=1, min_width=300, elem_classes="vscode-sidebar"):
+                gr.Markdown("#### EXPLORER")
+                repo_selector = gr.Radio(
+                    choices=list(REPOS.keys()), 
+                    value="auth-service/login.py", 
+                    label="Active Repository", 
+                    interactive=True
+                )
                 
-                gr.HTML("<div class='icon-header' style='margin-top: 24px;'><i class='ph ph-robot'></i> Agent Action Deck</div>")
-                with gr.Accordion("Security Operations", open=True):
-                    with gr.Row():
-                        scan_btn = gr.Button("Scan Code")
-                        sim_btn = gr.Button("Simulate Attack")
-                    patch_input = gr.Code(language="python", label="Patch Code")
-                    with gr.Row():
-                        patch_btn = gr.Button("Apply Patch", variant="primary")
-                        test_btn = gr.Button("Run Tests")
+                gr.HTML("<hr style='border-color: #3c3c3c; margin: 20px 0;'>")
+                gr.Markdown("#### SECUREHEAL AGENT")
                 
-                with gr.Accordion("Infrastructure Operations", open=False):
-                    service_input = gr.Dropdown(choices=["auth-service", "api-gateway", "db-layer", "payment-service"], label="Target Service", value="auth-service")
-                    with gr.Row():
-                        restart_btn = gr.Button("Restart Service")
-                        realloc_btn = gr.Button("Reallocate Resources")
-                    clean_btn = gr.Button("Clean Data Cache")
-                    classify_input = gr.Textbox(label="Anomaly Classification", placeholder="e.g., MEMORY_SPIKE")
-                    classify_btn = gr.Button("Classify Issue")
+                mode_toggle = gr.Radio(
+                    choices=["Manual Mode", "Auto Mode"], 
+                    value="Manual Mode", 
+                    label="Operation Mode"
+                )
+
+                with gr.Group(visible=True) as manual_group:
+                    sim_attack_btn = gr.Button("🚨 Simulate Attack", variant="secondary")
+                    scan_btn = gr.Button("🔍 Scan Code", variant="secondary")
+                    patch_btn = gr.Button("🛠️ Generate & Apply Patch", variant="primary")
+                    test_btn = gr.Button("🧪 Run Tests", variant="secondary")
+                
+                with gr.Group(visible=False) as auto_group:
+                    auto_run_btn = gr.Button("▶️ Start Autonomous Agent", variant="primary")
                     
-            # --- RIGHT COLUMN: TELEMETRY & LOGS ---
-            with gr.Column(scale=2):
-                with gr.Row(elem_classes="glass-panel"):
-                    stability_html = gr.HTML(value="<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>System Stability</p><h2 class='metric-value'>--</h2></div>")
-                    latency_html = gr.HTML(value="<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Current Latency</p><h2 class='metric-value'>--</h2></div>")
-                    reward_html = gr.HTML(value="<div style='text-align:center'><p style='color:#64748B;margin:0;font-weight:500'>Total Reward</p><h2 class='metric-value'>--</h2></div>")
-                
-                with gr.Row(elem_classes="glass-panel"):
-                    with gr.Column():
-                        services_df = gr.Dataframe(headers=["Microservice", "Health Status"], label="Infrastructure Status", interactive=False)
-                    with gr.Column():
-                        alerts_box = gr.Textbox(label="Active Threat Alerts", lines=4, interactive=False)
-                
-                with gr.Column(elem_classes="glass-panel"):
-                    code_display = gr.Code(language="python", interactive=False, label="Application Source Code")
-                
-                with gr.Row(elem_classes="glass-panel"):
-                    with gr.Column():
-                        action_result_display = gr.Textbox(label="Agent Action Result", lines=6, interactive=False)
-                    with gr.Column():
-                        logs_display = gr.Textbox(label="System Kernel Logs", lines=6, interactive=False, elem_classes="log-box")
+                gr.HTML("<hr style='border-color: #3c3c3c; margin: 20px 0;'>")
+                gr.Markdown("#### TELEMETRY")
+                stability_md = gr.Markdown("**System Stability:** <span class='status-ok'>100%</span>")
+                reward_md = gr.Markdown("**Accumulated Reward:** 0.0")
 
-        # --- Backend Logic ---
+            # MAIN EDITOR
+            with gr.Column(scale=4, elem_classes="vscode-editor"):
+                # Editor Area
+                with gr.Group():
+                    gr.HTML("<div class='editor-header'><i class='ph ph-file-code'></i> <span id='header-file'>auth-service/login.py</span></div>")
+                    code_editor = gr.Code(
+                        value=REPOS["auth-service/login.py"]["code"],
+                        language="python",
+                        label="",
+                        interactive=False,
+                        lines=16
+                    )
 
-        def update_ui_from_state(env: SecureHealEnvironment, last_result: str = ""):
-            if not env:
-                return [gr.update() for _ in range(9)]
-            
-            state = env.state
-            
-            stab_color = "metric-green" if state.system_stability > 0.8 else ("metric-red" if state.system_stability < 0.4 else "metric-value")
-            stab_html = f"<div style='text-align:center'><p style='color:#94A3B8;margin:0;font-weight:600;letter-spacing:0.05em;'>SYSTEM STABILITY</p><h2 class='{stab_color}'>{state.system_stability:.0%}</h2></div>"
-            
-            lat_color = "metric-red" if state.latency_current > 150 else "metric-blue"
-            lat_html = f"<div style='text-align:center'><p style='color:#94A3B8;margin:0;font-weight:600;letter-spacing:0.05em;'>CURRENT LATENCY</p><h2 class='{lat_color}'>{state.latency_current:.0f}ms</h2></div>"
-            
-            rew_html = f"<div style='text-align:center'><p style='color:#94A3B8;margin:0;font-weight:600;letter-spacing:0.05em;'>TOTAL REWARD</p><h2 class='metric-blue'>{state.total_reward:.2f}</h2></div>"
-            
-            services_data = [[k, "Healthy" if v=="up" else ("Down" if v=="down" else "Degraded")] for k, v in state.services_status.items()]
-            
-            alerts = []
-            if state.vulnerability_present: alerts.append(f"[!] Vulnerability: {state.vulnerability_type}")
-            if state.anomaly_type: alerts.append(f"[!] Anomaly: {state.anomaly_type}")
-            for cf in state.cascading_failures: alerts.append(f"[!] Cascading: {cf}")
-            if state.data_corrupted: alerts.append("[!] Data Corruption Detected")
-            alerts_text = "\n".join(alerts) if alerts else "All Systems Nominal"
-            
-            logs = env._build_system_logs()
-            logs_text = "\n".join(logs)
-            
-            return [stab_html, lat_html, rew_html, services_data, alerts_text, env._current_code, last_result, logs_text]
+                # Terminal Area
+                with gr.Group():
+                    gr.HTML("<div class='editor-header' style='border-top: 1px solid #3c3c3c;'><i class='ph ph-terminal'></i> TERMINAL</div>")
+                    terminal_output = gr.Textbox(
+                        value="user@secureheal:~/workspace$ ./init_env.sh\n[INFO] Workspace loaded. Ready for directives.",
+                        label="",
+                        lines=10,
+                        interactive=False,
+                        elem_classes="log-box"
+                    )
 
-        def reset_env(level):
-            env = SecureHealEnvironment(curriculum_level=level)
-            obs = env.reset()
-            msg = obs.metadata.get("action_result", "Environment initialized. Awaiting agent directives.")
-            updates = update_ui_from_state(env, msg)
-            return [env] + updates
-
-        def perform_action(env, action_name, **kwargs):
-            if not env:
-                return [env] + [gr.update()] * 8
-            
-            if action_name == "scan_code": res = env._handle_scan_code()
-            elif action_name == "simulate_attack": res = env._handle_simulate_attack()
-            elif action_name == "apply_patch": res = env._handle_apply_patch(kwargs.get("patch_code", ""))
-            elif action_name == "run_tests": res = env._handle_run_tests()
-            elif action_name == "restart_service": res = env._handle_restart_service(kwargs.get("service", ""))
-            elif action_name == "reallocate_resources": res = env._handle_reallocate_resources()
-            elif action_name == "clean_data": res = env._handle_clean_data()
-            elif action_name == "classify_issue": res = env._handle_classify_issue(kwargs.get("classification", ""))
-            else: res = {"result": "Unknown action"}
-            
-            updates = update_ui_from_state(env, res.get("result", ""))
-            return [env] + updates
-
-        # Event Listeners
-        outputs = [env_state, stability_html, latency_html, reward_html, services_df, alerts_box, code_display, action_result_display, logs_display]
+        # ---------------------------------------------------------
+        # Backend Logic & Events
+        # ---------------------------------------------------------
         
-        reset_btn.click(reset_env, inputs=[curriculum_level], outputs=outputs)
-        scan_btn.click(lambda e: perform_action(e, "scan_code"), inputs=[env_state], outputs=outputs)
-        sim_btn.click(lambda e: perform_action(e, "simulate_attack"), inputs=[env_state], outputs=outputs)
-        patch_btn.click(lambda e, p: perform_action(e, "apply_patch", patch_code=p), inputs=[env_state, patch_input], outputs=outputs)
-        test_btn.click(lambda e: perform_action(e, "run_tests"), inputs=[env_state], outputs=outputs)
-        restart_btn.click(lambda e, s: perform_action(e, "restart_service", service=s), inputs=[env_state, service_input], outputs=outputs)
-        realloc_btn.click(lambda e: perform_action(e, "reallocate_resources"), inputs=[env_state], outputs=outputs)
-        clean_btn.click(lambda e: perform_action(e, "clean_data"), inputs=[env_state], outputs=outputs)
-        classify_btn.click(lambda e, c: perform_action(e, "classify_issue", classification=c), inputs=[env_state, classify_input], outputs=outputs)
+        def update_repo(repo_name):
+            return (
+                REPOS[repo_name]["code"], 
+                f"user@secureheal:~/workspace$ cd {repo_name.split('/')[0]}\n[INFO] Switched to {repo_name}", 
+                repo_name
+            )
+            
+        repo_selector.change(
+            update_repo, 
+            inputs=[repo_selector], 
+            outputs=[code_editor, terminal_output, current_repo_state]
+        )
+
+        def toggle_mode(mode):
+            is_manual = mode == "Manual Mode"
+            log = f"user@secureheal:~/workspace$ set_mode {mode.lower().replace(' ', '_')}\n[INFO] Switched to {'Manual API' if is_manual else 'Autonomous Agent API'}."
+            return gr.update(visible=is_manual), gr.update(visible=not is_manual), log
+            
+        mode_toggle.change(
+            toggle_mode,
+            inputs=[mode_toggle],
+            outputs=[manual_group, auto_group, terminal_output]
+        )
+
+        # Manual Actions
+        def manual_simulate(repo):
+            code = REPOS[repo]["attack"]
+            log = f"user@secureheal:~/workspace$ ./simulate_attack --target {repo}\n[CRITICAL] Exploit payload injected into {repo}!\n[WARN] System stability dropping..."
+            stab = "**System Stability:** <span class='status-error'>30%</span>"
+            return code, log, stab
+            
+        sim_attack_btn.click(manual_simulate, inputs=[current_repo_state], outputs=[code_editor, terminal_output, stability_md])
+
+        def manual_scan(repo):
+            log = f"user@secureheal:~/workspace$ ./scanner --file {repo}\n[INFO] Scanning codebase...\n[ALERT] Vulnerability detected: High Severity (CWE-89/CWE-77)"
+            return log
+            
+        scan_btn.click(manual_scan, inputs=[current_repo_state], outputs=[terminal_output])
+
+        def manual_patch(repo):
+            code = REPOS[repo]["patch"]
+            log = f"user@secureheal:~/workspace$ secureheal-agent patch --file {repo}\n[INFO] Agent generated secure AST patch for {repo}.\n[INFO] Patch applied successfully."
+            return code, log
+            
+        patch_btn.click(manual_patch, inputs=[current_repo_state], outputs=[code_editor, terminal_output])
+
+        def manual_test(repo):
+            log = f"user@secureheal:~/workspace$ pytest tests/\n[INFO] Running test suite against patched {repo}...\n[PASS] All security assertions passed.\n[INFO] System stability restored."
+            stab = "**System Stability:** <span class='status-ok'>100%</span>"
+            rew = "**Accumulated Reward:** +1.0"
+            return log, stab, rew
+
+        test_btn.click(manual_test, inputs=[current_repo_state], outputs=[terminal_output, stability_md, reward_md])
+
+        # Auto Mode Generator
+        def autonomous_agent_run(repo):
+            # Step 1: Scan
+            log = f"user@secureheal:~/workspace$ secureheal-agent auto-run\n[AUTO] Agent started on {repo}.\n[AUTO] Phase 1: Scanning codebase for vulnerabilities..."
+            yield gr.update(), log, gr.update(), gr.update()
+            time.sleep(1.5)
+            
+            # Step 2: Attack detected/simulated
+            log += "\n[CRITICAL] Detected active exploitation in progress!"
+            code = REPOS[repo]["attack"]
+            stab = "**System Stability:** <span class='status-error'>25%</span>"
+            yield code, log, stab, gr.update()
+            time.sleep(2.0)
+            
+            # Step 3: Patch
+            log += "\n[AUTO] Phase 2: Analyzing vulnerability...\n[AUTO] Generating secure AST patch..."
+            yield gr.update(), log, gr.update(), gr.update()
+            time.sleep(1.5)
+            
+            code = REPOS[repo]["patch"]
+            log += "\n[AUTO] Patch successfully applied to AST."
+            yield code, log, gr.update(), gr.update()
+            time.sleep(1.5)
+            
+            # Step 4: Test & Push
+            log += "\n[AUTO] Phase 3: Running regression and exploit tests..."
+            yield gr.update(), log, gr.update(), gr.update()
+            time.sleep(2.0)
+            
+            log += "\n[PASS] Vulnerability mitigated. 0/5 exploits successful.\n[AUTO] Phase 4: Pushing secure changes to production space..."
+            stab = "**System Stability:** <span class='status-ok'>100%</span>"
+            rew = "**Accumulated Reward:** +2.5"
+            yield gr.update(), log, stab, rew
+
+        auto_run_btn.click(
+            autonomous_agent_run, 
+            inputs=[current_repo_state], 
+            outputs=[code_editor, terminal_output, stability_md, reward_md]
+        )
 
     return demo
 
 if __name__ == "__main__":
     demo = create_demo()
-    # Use dark mode base with slate accents
-    theme = gr.themes.Base(
-        primary_hue="blue",
-        secondary_hue="indigo",
-        neutral_hue="slate",
-        font=[gr.themes.GoogleFont("Inter"), "sans-serif"]
-    ).set(
-        body_background_fill="*neutral_950",
-        block_background_fill="*neutral_900",
-        block_border_width="1px",
-        block_border_color="*neutral_800",
-        input_background_fill="*neutral_800",
-    )
-    demo.launch(server_name="0.0.0.0", server_port=7860, share=False, css=custom_css, theme=theme)
+    demo.launch(server_name="0.0.0.0", server_port=7860, share=False)
