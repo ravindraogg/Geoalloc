@@ -198,13 +198,13 @@ We used **TRL's GRPOTrainer** alongside **Unsloth** (QLoRA 4-bit) to train Qwen2
 ### Training Rewards
 *As required by the hackathon, here are our training reward curves showing convergence.*
 
-![Total Reward](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
+![Total Reward](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
 *Figure 1: Mean group reward per episode. The **untrained baseline (flat line at reward=2.7)** was quickly surpassed as the agent mastered tool XML formatting and security reasoning.*
 
-![Clipped Ratio](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/clipped-ratio.jpeg)
+![Clipped Ratio](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/clipped-ratio.jpeg)
 *Figure 2: The Clipped Ratio diagnostic. The drop from 98.75% to 0.63% proves the policy stabilized and "locked in" its learning without catastrophic forgetting.*
 
-![Performance Comparison](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
+![Performance Comparison](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
 *Figure 3: Quantitative improvement after GRPO training across all 4 key metrics.*
 
 See `training/train.py` for the GRPO training pipeline and `TRAINING_EVIDENCE.md` for the full technical breakdown.

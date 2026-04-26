@@ -20,18 +20,18 @@ The mean reward per episode shows a clear upward trend as the agent learns to ch
 
 **[View Official Training Logs (Hugging Face Jobs)](https://huggingface.co/jobs/Nitesh-Reddy/69ecf914d70108f37acdeb13)**
 
-![Reward Curve](benchmarks-graph/r-curve.jpeg)
+![Reward Curve](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
 *The horizontal baseline (not pictured on WandB but calculated during evaluation) for a random agent is **2.7**. Our agent reached a peak mean reward of **4.141** (Step 170).*
 
 ### 2. KL Divergence
 KL Divergence stayed within stable bounds (0.01 - 0.05), indicating the model improved its policy without catastrophically forgetting its base reasoning capabilities.
 
-![KL Divergence](benchmarks-graph/kl.jpeg)
+![KL Divergence](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/kl.jpeg)
 
 ### 3. Clipped Ratio & Policy Stability
 The Clipped Ratio is our primary diagnostic for training health. A high initial value followed by a sharp drop indicates the model was making large updates early on but eventually stabilized into a consistent, high-performing policy.
 
-![Clipped Ratio](benchmarks-graph/clipped-ratio.jpeg)
+![Clipped Ratio](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/clipped-ratio.jpeg)
 *Our run shows a classic stability curve: dropping from **98.75%** to **0.63%**, proving the agent effectively "locked in" its knowledge.*
 
 ## Multi-Tier Reward Architecture
@@ -66,7 +66,7 @@ These are hard, binary signals captured within our isolated sandbox environment 
 | Step Efficiency (%) | 20% | **85%** |
 
 ### Visual Comparison
-![Performance Comparison](benchmarks-graph/performance_comparison.png)
+![Performance Comparison](https://media.githubusercontent.com/media/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
 
 ## Representative Log Sample (Step 482)
 
