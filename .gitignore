@@ -1,9 +1,10 @@
 # Logs and temporary files
 *.log
+!test_results.log
 *.txt
 !requirements.txt
 *.exitcode
-test_results.log
+# test_results.log - REMOVED FROM IGNORE
 test_out.txt
 test_output.txt
 

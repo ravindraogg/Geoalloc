@@ -24,12 +24,12 @@ license: mit
 [![Meta PyTorch](https://img.shields.io/badge/Meta%20PyTorch-Hackathon%202026-orange)](https://meta-pytorch.org/OpenEnv/)
 
 ## Important Links
-- **Demo Video:** [YouTube Video](https://youtube.com/watch?v=S0T0E9S1ECU)
+- **Demo Video:** [YouTube Video]()
 - **Training Logs:** [Hugging Face Jobs Training Run](https://huggingface.co/jobs/Nitesh-Reddy/69ecf914d70108f37acdeb13)
 - **Training Evidence:** [Detailed Logs & Plots](TRAINING_EVIDENCE.md)
-- **Pitch Deck:** [Presentation Slides](pitch_deck_content.md)
+- **Pitch Deck:** [Presentation Slides](https://canva.link/9kw6rf18p5p9hhx)
 - **Mini-Blog Post:** [Hugging Face Blog](hf_blog_post.md)
-- **Training Notebook:** [Interactive Colab Notebook](training/SecureHeal_Arena_Training.ipynb)
+- **Training Code:** [Interactive Code](training/train_hf_job.py) 
 
 ## Problem
 
