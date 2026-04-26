@@ -337,6 +337,10 @@ def create_demo():
             stab = "**System Stability:** <span class='status-ok'>100%</span>"
             rew = "**Accumulated Reward:** +2.5"
             yield gr.update(), log, stab, rew
+            time.sleep(1.0)
+            
+            log += "\n[SUCCESS] Deployment complete. Agent returning to standby mode."
+            yield gr.update(), log, stab, rew
 
         auto_run_btn.click(
             autonomous_agent_run, 
