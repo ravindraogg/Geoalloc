@@ -18,19 +18,22 @@ The following plots were captured during our primary training run. They show the
 ### 1. Cumulative Reward Improvement
 The mean reward per episode shows a clear upward trend as the agent learns to chain tool calls correctly.
 
-![Reward Curve](benchmarks-graph/r-curve.jpeg)
+![Reward Curve](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
 
 ### 2. KL Divergence
 KL Divergence stayed within stable bounds (0.01 - 0.05), indicating the model improved its policy without catastrophically forgetting its base reasoning capabilities.
 
-![KL Divergence](benchmarks-graph/kl.jpeg)
+![KL Divergence](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/kl.jpeg)
 
 ### 3. Clipped Ratio & Policy Stability
-![Clipped Ratio](benchmarks-graph/clipped-ratio.jpeg)
+![Clipped Ratio](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/clipped-ratio.jpeg)
 
-## ⚖️ Reward Function Breakdown
+## ⚖️ Multi-Tier Reward Architecture
 
-We used **Group Relative Policy Optimization (GRPO)** which computes rewards relative to a group of completions. Our reward rubric includes:
+To prevent reward hacking and ensure stable convergence, we utilized a **Multi-Tier Reward System**. This distinguishes between the *heuristic* rewards used during the GRPO policy optimization and the *verifiable* signals used for final agent validation.
+
+### Tier 1: GRPO Heuristic Rewards (Policy Optimization)
+These rewards are computed relative to the group of completions during training to enforce correct behavior and reasoning.
 
 | Reward Component | Weight | Target Capability |
 |------------------|--------|-------------------|
@@ -38,6 +41,14 @@ We used **Group Relative Policy Optimization (GRPO)** which computes rewards rel
 | **Format**       | 0.30   | Using `<tool_call>` XML tags and valid JSON. |
 | **Reasoning**    | 0.20   | Diagnostic analysis (identifying SQLi/XSS). |
 | **Quality**      | 0.10   | Concise, actionable responses (no rambling). |
+
+### Tier 2: Verifiable Rewards (RLVR - Final Validation)
+These are hard, binary signals captured within our isolated sandbox environment to verify the agent's real-world impact.
+
+1. **Exploit Blocked (RLVR):** A verifiable check that the vulnerability is gone.
+2. **Test Pass Rate (RLVR):** Verification that the patch didn't break core functionality.
+3. **System Stability:** Recovery of latency and resource metrics.
+4. **Failure Resolution:** Halting of active anomalies and disk/memory pressure.
 
 ## 🚀 Performance: Baseline vs. Trained Agent
 
@@ -49,7 +60,7 @@ We used **Group Relative Policy Optimization (GRPO)** which computes rewards rel
 | Step Efficiency (%) | 20% | **85%** |
 
 ### Visual Comparison
-![Performance Comparison](benchmarks-graph/performance_comparison.png)
+![Performance Comparison](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
 
 ## 📜 Representative Log Sample (Step 482)
 

@@ -214,14 +214,26 @@ reward() → computed at each step with 4 independent functions
 
 ## 5. Reward Engineering
 
-### Four Independent Reward Functions
+### Multi-Tier Reward Architecture
+
+We utilize a hybrid reward system to balance stable policy optimization with verifiable security outcomes.
+
+#### Tier 1: GRPO Heuristic Rewards (Policy Optimization)
+Used during the GRPO training phase to enforce structural correctness and reasoning depth.
+- **Tool Usage (40%):** Valid sequence of `scan_code` → `apply_patch`.
+- **Format (30%):** Valid `<tool_call>` XML/JSON syntax.
+- **Reasoning (20%):** Security-relevant diagnosis keywords.
+- **Quality (10%):** Actionable, concise outputs.
+
+#### Tier 2: Verifiable Rewards (RLVR - Final Validation)
+These are the core metrics used for final evaluation of the agent's effectiveness in the SecureHeal Arena.
 
 | # | Signal | Source | Type | Weight |
 |---|---|---|---|---|
-| R1 | Exploit blocked | SecureCode | RLVR — binary verifiable | High |
-| R2 | Test suite pass rate | SecureCode | RLVR — continuous (0.0–1.0) | High |
-| R3 | System stability restored | DataHeal | Semi-verifiable (latency delta) | Medium |
-| R4 | Cascading failures halted | DataHeal | Heuristic (anomaly count) | Medium |
+| R1 | Exploit blocked | SecureCode | RLVR — binary verifiable | 0.35 |
+| R2 | Test suite pass rate | SecureCode | RLVR — continuous (0.0–1.0) | 0.35 |
+| R3 | System stability restored | DataHeal | Semi-verifiable (latency delta) | 0.20 |
+| R4 | Cascading failures halted | DataHeal | Heuristic (anomaly count) | 0.10 |
 
 ### Reward Formula Per Step
 

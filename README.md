@@ -79,7 +79,11 @@ Episode ends when: system stable + tests passing OR max_steps reached
 | `reallocate_resources` | DataHeal | Shift compute resources |
 | `classify_issue` | DataHeal | Tag anomaly type |
 
-### Four Independent Reward Functions
+### ⚖️ Multi-Tier Reward Architecture
+To ensure the highest accuracy of patches, we use a hybrid reward strategy:
+
+- **Tier 1: GRPO Heuristic Rewards** (Optimization phase): Enforces correct tool usage (40%), formatting (30%), reasoning (20%), and quality (10%).
+- **Tier 2: Verifiable Rewards (RLVR)** (Validation phase):
 
 | # | Signal | Type | Weight |
 |---|--------|------|--------|
