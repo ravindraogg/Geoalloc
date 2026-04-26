@@ -41,11 +41,10 @@ def scan_file(filepath):
                 print(f"  [⚠️] Vulnerability Detected in {filepath}!")
                 analysis = result.get('analysis', '')
                 
-                # Show brief analysis
+                # Show full agent reasoning (excluding raw tool calls)
                 clean_analysis = re.sub(r'<tool_call>.*?</tool_call>', '', analysis, flags=re.DOTALL).strip()
                 if clean_analysis:
-                    preview = (clean_analysis[:300] + '...') if len(clean_analysis) > 300 else clean_analysis
-                    print(f"  [>] Agent Analysis: \n      {preview.replace(chr(10), chr(10) + '      ')}\n")
+                    print(f"  [>] Agent Analysis: \n\n{clean_analysis}\n")
                 
                 # Extract and apply patch
                 apply_patch(filepath, analysis)
@@ -67,6 +66,8 @@ def apply_patch(filepath, analysis):
             patch_data = json.loads(match.group(1))
             patch_code = patch_data.get("patch_code") or patch_data.get("code") or patch_data.get("patch")
             if patch_code:
+                print(f"\n  [>>>] Proposed Patch Code:\n----------------------------------------\n{patch_code}\n----------------------------------------\n")
+                
                 # Backup the original file
                 backup_path = filepath + ".bak"
                 os.rename(filepath, backup_path)
@@ -78,7 +79,9 @@ def apply_patch(filepath, analysis):
             else:
                 print("  [!] Patch tool called, but no code was provided in the arguments.")
         except Exception as e:
-            print(f"  [!] Failed to parse or apply patch automatically: {e}")
+            print(f"  [!] Failed to parse patch JSON automatically: {e}")
+            # If JSON parsing fails, at least print the raw tool call so the user can see the code!
+            print(f"\n  [>>>] Raw Agent Output (Manual Fix Required):\n----------------------------------------\n{match.group(1)}\n----------------------------------------\n")
 
 def process_target(target):
     if target.startswith("http://") or target.startswith("https://"):
