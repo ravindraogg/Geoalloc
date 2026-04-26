@@ -131,13 +131,6 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-try:
-    from app import create_demo
-    demo = create_demo()
-    app = gr.mount_gradio_app(app, demo, path="/")
-except Exception as e:
-    print(f"Error mounting Gradio app: {e}")
-
 
 @app.get("/health")
 async def health():
@@ -208,6 +201,13 @@ async def agent_prompt(request: AgentRequest):
 
     return AgentResponse(response=response_text, tool_calls=tool_calls)
 
+
+try:
+    from app import create_demo
+    demo = create_demo()
+    app = gr.mount_gradio_app(app, demo, path="/")
+except Exception as e:
+    print(f"Error mounting Gradio app: {e}")
 
 if __name__ == "__main__":
     import uvicorn
