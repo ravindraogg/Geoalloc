@@ -18,15 +18,15 @@ The following plots were captured during our primary training run. They show the
 ### 1. Cumulative Reward Improvement
 The mean reward per episode shows a clear upward trend as the agent learns to chain tool calls correctly.
 
-![Reward Curve](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
+![Reward Curve](benchmarks-graph/r-curve.jpeg)
 
 ### 2. KL Divergence
 KL Divergence stayed within stable bounds (0.01 - 0.05), indicating the model improved its policy without catastrophically forgetting its base reasoning capabilities.
 
-![KL Divergence](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/kl.jpeg)
+![KL Divergence](benchmarks-graph/kl.jpeg)
 
 ### 3. Clipped Ratio & Policy Stability
-![Clipped Ratio](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/clipped-ratio.jpeg)
+![Clipped Ratio](benchmarks-graph/clipped-ratio.jpeg)
 
 ## ⚖️ Multi-Tier Reward Architecture
 
@@ -60,7 +60,7 @@ These are hard, binary signals captured within our isolated sandbox environment 
 | Step Efficiency (%) | 20% | **85%** |
 
 ### Visual Comparison
-![Performance Comparison](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
+![Performance Comparison](benchmarks-graph/performance_comparison.png)
 
 ## 📜 Representative Log Sample (Step 482)
 
