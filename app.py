@@ -306,40 +306,52 @@ def create_demo():
 
         # Auto Mode Generator
         def autonomous_agent_run(repo):
-            # Step 1: Scan
-            log = f"user@secureheal:~/workspace$ secureheal-agent auto-run\n[AUTO] Agent started on {repo}.\n[AUTO] Phase 1: Scanning codebase for vulnerabilities..."
+            # Step 1: Scan (Agent Alpha)
+            log = f"user@secureheal:~/workspace$ secureheal-agent auto-run\n[AUTO] Orchestrating Multi-Agent Debate Pipeline for {repo}..."
+            yield gr.update(), log, gr.update(), gr.update()
+            time.sleep(1.0)
+            
+            log += "\n[🕵️ AGENT ALPHA] Phase 1: Performing deep code reconnaissance..."
             yield gr.update(), log, gr.update(), gr.update()
             time.sleep(1.5)
             
-            # Step 2: Attack detected/simulated
-            log += "\n[CRITICAL] Detected active exploitation in progress!"
+            log += "\n[🕵️ AGENT ALPHA] Vulnerability detected: SQL Injection (CWE-89)."
+            yield gr.update(), log, gr.update(), gr.update()
+            time.sleep(1.0)
+            
+            # Step 2: Attack (Agent Beta)
+            log += "\n[🥷 AGENT BETA] Phase 2: Planning Red Team exploit verification..."
+            yield gr.update(), log, gr.update(), gr.update()
+            time.sleep(1.5)
+            
+            log += "\n[🥷 AGENT BETA] Exploit simulated! System stability compromised."
             code = REPOS[repo]["attack"]
             stab = "**System Stability:** <span class='status-error'>25%</span>"
             yield code, log, stab, gr.update()
             time.sleep(2.0)
             
-            # Step 3: Patch
-            log += "\n[AUTO] Phase 2: Analyzing vulnerability...\n[AUTO] Generating secure AST patch..."
+            # Step 3: Patch (Agent Gamma)
+            log += "\n[🛡️ AGENT GAMMA] Phase 3: Drafting secure AST patch to counter Red Team..."
             yield gr.update(), log, gr.update(), gr.update()
             time.sleep(1.5)
             
             code = REPOS[repo]["patch"]
-            log += "\n[AUTO] Patch successfully applied to AST."
+            log += "\n[🛡️ AGENT GAMMA] Patch applied. Neutralizing exploit vectors..."
             yield code, log, gr.update(), gr.update()
             time.sleep(1.5)
             
-            # Step 4: Test & Push
-            log += "\n[AUTO] Phase 3: Running regression and exploit tests..."
+            # Step 4: Test & Deploy
+            log += "\n[AUTO] Finalizing: Running security regression suite..."
             yield gr.update(), log, gr.update(), gr.update()
             time.sleep(2.0)
             
-            log += "\n[PASS] Vulnerability mitigated. 0/5 exploits successful.\n[AUTO] Phase 4: Pushing secure changes to production space..."
+            log += "\n[PASS] All exploit tests blocked. System hardening complete.\n[AUTO] Pushing secure changes to production environment..."
             stab = "**System Stability:** <span class='status-ok'>100%</span>"
             rew = "**Accumulated Reward:** +2.5"
             yield gr.update(), log, stab, rew
             time.sleep(1.0)
             
-            log += "\n[SUCCESS] Deployment complete. Agent returning to standby mode."
+            log += "\n[SUCCESS] Multi-agent mission complete. Returning to standby."
             yield gr.update(), log, stab, rew
 
         auto_run_btn.click(

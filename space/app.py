@@ -110,6 +110,7 @@ def run_agent(code: str, context: str = "web application", max_tokens: int = 102
     """Run the multi-agent SecureHeal pipeline on the given code."""
     
     # AGENT 1: The Scanner (Recon)
+    print(f"🕵️ [AGENT ALPHA] Starting reconnaissance scan...")
     prompt_scanner = (
         f"You are [Agent Alpha - Scanner]. You are a senior security researcher. "
         f"Analyze the following {context} code for vulnerabilities. "
@@ -120,8 +121,10 @@ def run_agent(code: str, context: str = "web application", max_tokens: int = 102
     msg_1 = [{"role": "user", "content": prompt_scanner}]
     out_1 = PIPE(msg_1, max_new_tokens=max_tokens//3, do_sample=True, temperature=0.6)
     report_1 = out_1[0]["generated_text"][-1]["content"]
+    print(f"🕵️ [AGENT ALPHA] Recon report generated.")
     
     # AGENT 2: The Attacker (Red Team)
+    print(f"🥷 [AGENT BETA] Starting Red Team exploit generation...")
     prompt_attacker = (
         f"You are [Agent Beta - Attacker]. You are a Red Team exploit developer. "
         f"Based on Agent Alpha's recon report, write a simulated exploit or attack payload "
@@ -133,8 +136,10 @@ def run_agent(code: str, context: str = "web application", max_tokens: int = 102
     msg_2 = [{"role": "user", "content": prompt_attacker}]
     out_2 = PIPE(msg_2, max_new_tokens=max_tokens//3, do_sample=True, temperature=0.7)
     report_2 = out_2[0]["generated_text"][-1]["content"]
+    print(f"🥷 [AGENT BETA] Exploit simulation complete.")
 
     # AGENT 3: The Defender (Blue Team)
+    print(f"🛡️ [AGENT GAMMA] Starting Blue Team patch drafting...")
     prompt_defender = (
         f"You are [Agent Gamma - Defender]. You are a Blue Team security engineer. "
         f"You must neutralize Agent Beta's attack by writing a secure patch for the original code. "
@@ -146,6 +151,7 @@ def run_agent(code: str, context: str = "web application", max_tokens: int = 102
     msg_3 = [{"role": "user", "content": prompt_defender}]
     out_3 = PIPE(msg_3, max_new_tokens=max_tokens//2, do_sample=True, temperature=0.4)
     report_3 = out_3[0]["generated_text"][-1]["content"]
+    print(f"🛡️ [AGENT GAMMA] Secure patch drafted.")
 
     # Stitch the debate log together
     final_output = (
