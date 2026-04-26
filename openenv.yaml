@@ -1,0 +1,13 @@
+spec_version: 1
+name: secureheal_arena
+type: space
+runtime: fastapi
+app: space/app:app
+port: 7860
+description: "A merged RL environment for cybersecurity vulnerability detection + autonomous system recovery."
+tags:
+  - cybersecurity
+  - reinforcement-learning
+  - grpo
+  - unsloth
+  - openenv

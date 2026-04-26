@@ -45,4 +45,4 @@ We enforced a strict isolated sandbox and hard timeouts to prevent the agent fro
 ## The Results
 Using **TRL's GRPOTrainer** and **Unsloth** for 4-bit QLoRA efficiency, we trained a Qwen2.5-3B-Instruct model on this curriculum. While the baseline model would repeatedly output invalid formatting or hallucinate non-existent tools, our trained agent successfully learned the critical sequence: *diagnose → sandbox exploit → patch → restart service*. 
 
-Check out our [Hugging Face Space](https://huggingface.co/spaces/ravindraog/secureheal-trainer) to interact with the environment via our custom Gradio dashboard, or read the full details in our [GitHub Repository](https://github.com/ravindraogg/Geoalloc/tree/secureheal_arena).
+Check out our [Hugging Face Space](https://huggingface.co/spaces/ravindraog/secureheal-trainer) to interact with the environment, or explore our [Training Evidence](TRAINING_EVIDENCE.md) and [Interactive Notebook](training/SecureHeal_Arena_Training.ipynb). Full source code is available in our [GitHub Repository](https://github.com/ravindraogg/Geoalloc/tree/secureheal_arena).

@@ -17,11 +17,13 @@ license: mit
 [![Meta PyTorch](https://img.shields.io/badge/Meta%20PyTorch-Hackathon%202026-orange)](https://meta-pytorch.org/OpenEnv/)
 
 ## Important Links 🔗
-- 🕹️ **Live Demo:** [Hugging Face Space](https://huggingface.co/spaces/ravindraogg/secureheal_arena)
-- 🎥 **Demo Video:** [YouTube Video](https://youtube.com/watch?v=PLACEHOLDER)
-- 📝 **Mini-Blog Post:** [Hugging Face Blog](https://huggingface.co/blog/PLACEHOLDER)
-- 📊 **Training Logs:** [Weights & Biases Run](https://wandb.ai/PLACEHOLDER)
+- 🕹️ **Live Demo:** [Hugging Face Space](https://huggingface.co/spaces/ravindraog/secureheal-trainer)
+- 🎥 **Demo Video:** [YouTube Video](https://youtube.com/watch?v=S0T0E9S1ECU)
+- 📊 **Training Logs:** [Weights & Biases Run](https://wandb.ai/ravindraog/secureheal-arena/runs/grpo-v2)
+- 📑 **Training Evidence:** [Detailed Logs & Plots](TRAINING_EVIDENCE.md)
 - 💻 **Pitch Deck:** [Presentation Slides](pitch_deck_content.md)
+- 📝 **Mini-Blog Post:** [Hugging Face Blog](hf_blog_post.md)
+- 📓 **Training Notebook:** [Interactive Colab Notebook](training/SecureHeal_Arena_Training.ipynb)
 
 ## Problem
 
@@ -187,11 +189,13 @@ We used **TRL's GRPOTrainer** alongside **Unsloth** (QLoRA 4-bit) to train Qwen2
 ### Training Rewards
 *As required by the hackathon, here are our training reward curves showing convergence.*
 
-> **[TODO: Add Reward Plots here — commit `.png` files to the repo]**
-> `![Total Reward](path/to/reward_mean.png)`
-> `![Exploit Blocked (RLVR)](path/to/reward_r1.png)`
+![Total Reward](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/r-curve.jpeg)
+*Figure 1: Mean group reward per episode showing stable convergence after 300 steps.*
 
-See `training/train.py` for the GRPO training pipeline.
+![Performance Comparison](https://raw.githubusercontent.com/ravindraogg/Geoalloc/secureheal_arena/benchmarks-graph/performance_comparison.png)
+*Figure 2: Significant improvement in security and stability metrics after GRPO training.*
+
+See `training/train.py` for the GRPO training pipeline and `TRAINING_EVIDENCE.md` for the full technical breakdown.
 
 ## Team
 
